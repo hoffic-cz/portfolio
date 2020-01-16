@@ -71,6 +71,15 @@ FROM base as dev
 
 ENV APP_ENV=dev
 
+USER root
+
+RUN apk add --no-cache \
+  composer \
+  nodejs \
+  yarn
+
+USER nobody
+
 
 
 
