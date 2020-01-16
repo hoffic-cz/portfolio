@@ -1,0 +1,12 @@
+version: "3.4"
+
+services:
+  app:
+    build:
+      dockerfile: ./ops/docker/app/Dockerfile
+      context: ./
+      target: dev
+    ports:
+      - 8080:8080
+    volumes:
+      - ./:/var/www/html
