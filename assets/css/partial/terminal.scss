@@ -4,6 +4,7 @@ $terminal-width: 815px;
 $terminal-head-height: 65px;
 $terminal-height: 550px;
 $terminal-border-width: 2px;
+$close-button-size: 24px;
 
 .terminal {
   width: $terminal-width;
@@ -11,8 +12,40 @@ $terminal-border-width: 2px;
   background-color: $color-terminal-frame;
   border-radius: 5px 5px 0 0;
 
+  font-family: "Fira Mono", "Fira Code", "SF Mono", "Roboto Mono", "Lucida Console", Monaco, monospace;
+
   .head {
     height: $terminal-head-height;
+
+    font-size: 14px;
+
+    .upper {
+      height: $terminal-head-height / 2;
+
+      display: grid;
+      grid-template-columns: 1fr 36px;
+
+      .window-title {
+        color: $color-terminal-text;
+        text-align: center;
+        padding-top: 8px;
+      }
+
+      .close-button {
+        img {
+          width: $close-button-size;
+          height: $close-button-size;
+
+          position: relative;
+          right: 0;
+          top: 8.5px;
+        }
+      }
+    }
+
+    .lower {
+      height: $terminal-head-height / 2;
+    }
   }
 
   .content {

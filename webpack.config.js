@@ -25,6 +25,10 @@ Encore
      */
     .addEntry('index', ['./assets/js/pages/index.js', './assets/css/pages/index.scss'])
 
+    .copyFiles({
+        from: './assets/images',
+        to: 'images/[path][name].[hash:8].[ext]',
+    })
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
