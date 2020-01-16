@@ -42,14 +42,23 @@ COPY ops/docker/app/config/php.ini /etc/php7/conf.d/zzz_custom.ini
 # Configure supervisord
 COPY ops/docker/app/config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
+# Create cache directories
+RUN mkdir -p /.composer \
+  && mkdir -p /.cache/yarn
+
 # Make sure files/folders needed by the processes are accessable when they run under the nobody user
 RUN chown -R nobody.nobody /run && \
   chown -R nobody.nobody /var/lib && \
   chown -R nobody.nobody /var/tmp && \
-  chown -R nobody.nobody /var/log
+  chown -R nobody.nobody /var/log && \
+  chown -R nobody.nobody /.composer && \
+  chown -R nobody.nobody /.cache/yarn
 
 # Setup document root
 RUN mkdir -p /var/www/html
+
+# Set the workign dir to the document root
+WORKDIR /var/www/html
 
 # Switch to use a non-root user from here on
 USER nobody
