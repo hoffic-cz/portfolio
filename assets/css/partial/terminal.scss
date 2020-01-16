@@ -1,5 +1,25 @@
+@import "assets/css/colours";
+
+$terminal-width: 815px;
+$terminal-head-height: 65px;
+$terminal-height: 550px;
+$terminal-border-width: 2px;
+
 .terminal {
-  width: 815px;
-  height: 550px;
-  background-color: pink;
+  width: $terminal-width;
+  height: $terminal-height;
+  background-color: $color-terminal-frame;
+  border-radius: 5px 5px 0 0;
+
+  .head {
+    height: $terminal-head-height;
+  }
+
+  .content {
+    margin: 0 $terminal-border-width $terminal-border-width $terminal-border-width;
+    width: $terminal-width - 2 * $terminal-border-width;
+    height: $terminal-height - $terminal-head-height - $terminal-border-width;
+
+    background-color: $color-terminal-content;
+  }
 }
