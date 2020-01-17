@@ -20,6 +20,8 @@ $close-button-size: 24px;
 
     font-size: 14px;
 
+    user-select: none;
+
     .upper {
       height: $terminal-head-height / 2;
 
@@ -42,7 +44,6 @@ $close-button-size: 24px;
           top: 8.5px;
 
           cursor: pointer;
-          user-select: none;
         }
       }
     }
@@ -62,7 +63,7 @@ $close-button-size: 24px;
 
         &:hover {
           color: $color-terminal-highlight;
-          border-bottom: 1px solid $color-terminal-highlight;
+          border-bottom: $terminal-border-width solid $color-terminal-highlight;
         }
       }
     }

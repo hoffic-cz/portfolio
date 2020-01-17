@@ -55,5 +55,6 @@ function keyBackspace(terminal) {
 }
 
 function keyOther(terminal, key) {
+  if (key.charCodeAt(0) >= 32 && key.charCodeAt(0) !== 127)
   terminal.write(key);
 }
