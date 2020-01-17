@@ -39,12 +39,31 @@ $close-button-size: 24px;
           position: relative;
           right: 0;
           top: 8.5px;
+
+          cursor: pointer;
+          user-select: none;
         }
       }
     }
 
     .lower {
       height: $terminal-head-height / 2;
+      padding: 0 5px;
+
+      display: flex;
+
+      color: $color-terminal-text-dim;
+
+      .item {
+        padding: 5px;
+
+        cursor: pointer;
+
+        &:hover {
+          color: $color-terminal-highlight;
+          border-bottom: 1px solid $color-terminal-highlight;
+        }
+      }
     }
   }
 
