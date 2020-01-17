@@ -1,5 +1,7 @@
+import $ from "jquery";
 import {Terminal} from "xterm";
 import {FitAddon} from "xterm-addon-fit";
+import {commandExit, commandOther} from "./terminal-commands";
 
 const promptText = 'visitor@hoffic.dev:~$ ';
 
@@ -15,7 +17,10 @@ export function setUpTerminal(terminalElement) {
   terminal.open(terminalElement);
   fitAddon.fit();
 
+  terminal.widget = $(terminalElement).closest('.terminal-widget');
+
   configureInput(terminal);
+  configureButtons(terminal);
 
   terminal.prompt();
 }
@@ -66,10 +71,23 @@ function keyOther(terminal, key) {
   // Excluding common non-printable characters
   if (key.charCodeAt(0) >= 32 && key.charCodeAt(0) !== 127) {
     terminal.write(key);
+    terminal.inputBuffer += key;
   }
-  terminal.inputBuffer += key;
 }
 
 function command(terminal, command) {
-  alert(command);
+  switch (command) {
+    case 'exit':
+      commandExit(terminal);
+      break;
+    default:
+      commandOther(terminal);
+      break;
+  }
+}
+
+function configureButtons(terminal) {
+  terminal.widget.find('.close-button img').first().click(function () {
+    commandExit(terminal);
+  });
 }
