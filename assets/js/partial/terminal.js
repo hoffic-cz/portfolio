@@ -53,9 +53,9 @@ function keyEnter(terminal, key) {
 
   let input = terminal.inputBuffer;
   terminal.inputBuffer = '';
-  command(terminal, input);
-
-  terminal.prompt();
+  command(terminal, input, function () {
+    terminal.prompt();
+  });
 }
 
 function keyBackspace(terminal) {
@@ -75,13 +75,15 @@ function keyOther(terminal, key) {
   }
 }
 
-function command(terminal, command) {
+function command(terminal, command, commandCallback) {
   switch (command) {
+    case '':
+      break;
     case 'exit':
       commandExit(terminal);
       break;
     default:
-      commandOther(terminal);
+      commandOther(terminal, command, commandCallback);
       break;
   }
 }

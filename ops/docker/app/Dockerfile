@@ -26,7 +26,6 @@ RUN apk --no-cache add \
     php7-session \
     php7-simplexml \
     php7-xmlwriter \
-    php7-xdebug \
     php7-zip \
     nginx \
     supervisor \
@@ -85,9 +84,13 @@ USER root
 RUN apk add --no-cache \
   composer \
   nodejs \
-  yarn
+  yarn \
+  php7-xdebug
 
 USER nobody
+
+ENV PHP_IDE_CONFIG="serverName=portfolio.local"
+ENV XDEBUG_CONFIG="idekey=PHPSTORM"
 
 
 
