@@ -21,6 +21,8 @@ export function setUpTerminal(terminalElement) {
 }
 
 function configureInput(terminal) {
+  terminal.inputBuffer = '';
+
   terminal.onKey(function (event) {
     switch (event.key.charCodeAt(0)) {
       case 13:
@@ -33,8 +35,6 @@ function configureInput(terminal) {
         keyOther(terminal, event.key);
         break;
     }
-
-    console.log(event);
   });
 
   terminal.prompt = function () {
@@ -45,16 +45,31 @@ function configureInput(terminal) {
 function keyEnter(terminal, key) {
   terminal.write('\n');
   terminal.write(key);
+
+  let input = terminal.inputBuffer;
+  terminal.inputBuffer = '';
+  command(terminal, input);
+
   terminal.prompt();
 }
 
 function keyBackspace(terminal) {
   if (terminal._core.buffer.x > promptText.length) {
     terminal.write('\b \b');
+    terminal.inputBuffer = terminal.inputBuffer.substring(
+        0,
+        terminal.inputBuffer.length - 1);
   }
 }
 
 function keyOther(terminal, key) {
-  if (key.charCodeAt(0) >= 32 && key.charCodeAt(0) !== 127)
-  terminal.write(key);
+  // Excluding common non-printable characters
+  if (key.charCodeAt(0) >= 32 && key.charCodeAt(0) !== 127) {
+    terminal.write(key);
+  }
+  terminal.inputBuffer += key;
+}
+
+function command(terminal, command) {
+  alert(command);
 }
