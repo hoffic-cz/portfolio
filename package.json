@@ -16,6 +16,9 @@
         "build": "encore production --progress"
     },
     "dependencies": {
-        "bulma": "^0.8.0"
+        "bulma": "^0.8.0",
+        "jquery": "^3.4.1",
+        "xterm": "^4.3.0",
+        "xterm-addon-fit": "^0.3.0"
     }
 }

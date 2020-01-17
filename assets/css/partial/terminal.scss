@@ -1,12 +1,13 @@
 @import "assets/css/colours";
+@import "~xterm/css/xterm.css";
 
 $terminal-width: 815px;
 $terminal-head-height: 65px;
-$terminal-height: 550px;
+$terminal-height: 545px;
 $terminal-border-width: 2px;
 $close-button-size: 24px;
 
-.terminal {
+.terminal-widget {
   width: $terminal-width;
   height: $terminal-height;
   background-color: $color-terminal-frame;
@@ -73,5 +74,22 @@ $close-button-size: 24px;
     height: $terminal-height - $terminal-head-height - $terminal-border-width;
 
     background-color: $color-terminal-content;
+
+    /* width */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+      background: $color-terminal-content;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: $color-terminal-content;
+      border: 1px solid $color-terminal-text-dim;
+      border-radius: 3px;
+    }
   }
 }
