@@ -78,6 +78,7 @@ function keyOther(terminal, key) {
 function command(terminal, command, commandCallback) {
   switch (command) {
     case '':
+      commandCallback();
       break;
     case 'exit':
       commandExit(terminal);
