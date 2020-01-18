@@ -19,10 +19,13 @@ export function commandOther(terminal, command, commandCallback) {
     }),
     timeout: timeout,
     success: function (response) {
-      if (typeof response.stdout !== 'undefined') {
-        terminal.writeln(response.stdout);
+      if (response.stdout != null) {
+        let lines = response.stdout.split("\n");
+        lines.forEach(function (line) {
+          terminal.writeln(line);
+        });
       }
-      if (typeof response.alert !== 'undefined') {
+      if (response.alert != null) {
         alert(response.alert);
       }
       commandCallback();
