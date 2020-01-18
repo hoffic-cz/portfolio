@@ -36,10 +36,6 @@ export function commandOther(terminal, command, commandCallback) {
   });
 }
 
-export function commandLoad() {
-  notifyBackEnd('load')
-}
-
 function notifyBackEnd(command) {
   $.ajax('/command/', {
     method: 'POST',

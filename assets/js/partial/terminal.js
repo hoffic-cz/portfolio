@@ -1,7 +1,7 @@
 import $ from "jquery";
 import {Terminal} from "xterm";
 import {FitAddon} from "xterm-addon-fit";
-import {commandExit, commandLoad, commandOther} from "./terminal-commands";
+import {commandExit, commandOther} from "./terminal-commands";
 
 const promptText = 'visitor@hoffic.dev:~$ ';
 
@@ -22,9 +22,7 @@ export function setUpTerminal(terminalElement) {
   configureInput(terminal);
   configureButtons(terminal);
 
-  terminal.prompt();
-
-  commandLoad();
+  populateTerminal(terminal);
 }
 
 function configureInput(terminal) {
@@ -47,6 +45,15 @@ function configureInput(terminal) {
   terminal.prompt = function () {
     terminal.write(promptText);
   }
+}
+
+function populateTerminal(terminal) {
+  terminal.prompt();
+  terminal.writeln('intro');
+
+  commandOther(terminal, 'intro', function () {
+    terminal.prompt();
+  });
 }
 
 function keyEnter(terminal, key) {
