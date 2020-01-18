@@ -4,6 +4,7 @@
 namespace App\Controller;
 
 
+use App\Terminal\Terminal;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,9 +15,10 @@ class CommandController extends AbstractController
     /**
      * @Route(path="/command/")
      * @param Request $request
+     * @param Terminal $terminal
      * @return JsonResponse
      */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request, Terminal $terminal)
     {
         return new JsonResponse([
             'stdout' => sprintf(

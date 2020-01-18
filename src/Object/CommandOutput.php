@@ -6,18 +6,18 @@ namespace App\Object;
 
 class CommandOutput
 {
-    /** @var string */
+    /** @var string|null */
     private $stdout;
 
-    /** @var string */
+    /** @var string|null */
     private $alert;
 
     /**
      * CommandOutput constructor.
-     * @param string $stdout
-     * @param string $alert
+     * @param string|null $stdout
+     * @param string|null $alert
      */
-    public function __construct(string $stdout, string $alert)
+    public function __construct(?string $stdout = null, ?string $alert = null)
     {
         $this->stdout = $stdout;
         $this->alert = $alert;
@@ -26,7 +26,7 @@ class CommandOutput
     /**
      * @return string
      */
-    public function getStdout(): string
+    public function getStdout(): ?string
     {
         return $this->stdout;
     }
@@ -34,7 +34,7 @@ class CommandOutput
     /**
      * @return string
      */
-    public function getAlert(): string
+    public function getAlert(): ?string
     {
         return $this->alert;
     }

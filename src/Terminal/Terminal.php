@@ -10,6 +10,11 @@ class Terminal
 {
     public function command(string $command): CommandOutput
     {
-        throw new \RuntimeException();
+        return new CommandOutput(<<<STDOUT
+I'm a software engineer based in London/Prague specializing in building
+reliable back ends, helping out with smaller scale DevOps and soaking in
+knowledge like a sponge.
+STDOUT
+        );
     }
 }
