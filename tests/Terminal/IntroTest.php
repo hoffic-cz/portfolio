@@ -1,10 +1,11 @@
 <?php
 
 
-namespace App\Tests;
+namespace App\Tests\Terminal;
 
 
 use App\Terminal\Terminal;
+use App\Tests\BaseTest;
 
 class IntroTest extends BaseTest
 {
