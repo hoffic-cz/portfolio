@@ -6,6 +6,7 @@ namespace App\Terminal;
 
 
 use App\Object\CommandOutput;
+use App\Terminal\Command\ClearCommand;
 use App\Terminal\Command\IntroCommand;
 use App\Terminal\Command\NotFoundCommand;
 
@@ -17,18 +18,24 @@ class Terminal
     /** @var IntroCommand */
     private $introCommand;
 
+    /** @var ClearCommand */
+    private $clearCommand;
+
     /**
      * Terminal constructor.
      * @param NotFoundCommand $notFoundCommand
      * @param IntroCommand $introCommand
+     * @param ClearCommand $clearCommand
      */
     public function __construct(
         NotFoundCommand $notFoundCommand,
-        IntroCommand $introCommand
+        IntroCommand $introCommand,
+        ClearCommand $clearCommand
     )
     {
         $this->notFoundCommand = $notFoundCommand;
         $this->introCommand = $introCommand;
+        $this->clearCommand = $clearCommand;
     }
 
     public function command(string $command): CommandOutput
@@ -40,6 +47,9 @@ class Terminal
         switch ($parts[0]) {
             case 'intro':
                 $output = $this->introCommand->execute($parts);
+                break;
+            case 'clear':
+                $output = $this->clearCommand->execute($parts);
                 break;
             default:
                 $output = $this->notFoundCommand->execute($parts);
