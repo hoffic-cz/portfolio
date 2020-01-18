@@ -1,7 +1,10 @@
 import $ from "jquery";
 
+const timeout = 2500;
+
 export function commandExit(terminal) {
   terminal.widget.hide();
+  notifyBackEnd('exit');
 
   setTimeout(function () {
     alert('Well, I wanna see what you are gonna do now...');
@@ -14,7 +17,7 @@ export function commandOther(terminal, command, commandCallback) {
     data: JSON.stringify({
       command: command
     }),
-    timeout: 2500,
+    timeout: timeout,
     success: function (response) {
       if (typeof response.stdout !== 'undefined') {
         terminal.writeln(response.stdout);
@@ -30,5 +33,19 @@ export function commandOther(terminal, command, commandCallback) {
       }
       commandCallback();
     }
+  });
+}
+
+export function commandLoad() {
+  notifyBackEnd('load')
+}
+
+function notifyBackEnd(command) {
+  $.ajax('/command/', {
+    method: 'POST',
+    data: JSON.stringify({
+      command: command
+    }),
+    timeout: timeout,
   });
 }
