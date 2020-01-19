@@ -34,15 +34,29 @@ class CommandOutputTest extends BaseTest
         self::assertNull($output->getAlert());
     }
 
-    public function testValueStdout()
+    public function testValueStdout1()
     {
         $output = new CommandOutput('Hello Clem!');
         self::assertEquals('Hello Clem!', $output->getStdout());
     }
 
-    public function testValueAlert()
+    public function testValueStdout2()
+    {
+        $output = new CommandOutput();
+        $output->setStdout('Hello Clem!');
+        self::assertEquals('Hello Clem!', $output->getStdout());
+    }
+
+    public function testValueAlert1()
     {
         $output = new CommandOutput(null, 'Hello Clem!');
+        self::assertEquals('Hello Clem!', $output->getAlert());
+    }
+
+    public function testValueAlert2()
+    {
+        $output = new CommandOutput();
+        $output->setAlert('Hello Clem!');
         self::assertEquals('Hello Clem!', $output->getAlert());
     }
 

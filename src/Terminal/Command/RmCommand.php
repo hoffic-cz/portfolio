@@ -14,7 +14,18 @@ class RmCommand implements Command
     {
         $output = new CommandOutput();
 
-        $output->setTrigger('rm');
+        $containsFlags = isset($params[1]) && ($params[1] === '-Rf' || $params[1] === '-fR');
+        $correctDir = isset($params[2]) && ($params[2] === '/' || $params[2] === '/*');
+
+        if ($containsFlags && $correctDir) {
+            $output->setTrigger('rm');
+        } else {
+            $output->setStdout(<<<STDOUT
+Permission denied.
+Did you mean 'sudo rm -Rf /'?
+STDOUT
+);
+        }
 
         return $output;
     }

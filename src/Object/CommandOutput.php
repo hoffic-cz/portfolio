@@ -36,11 +36,27 @@ class CommandOutput
     }
 
     /**
+     * @param string|null $stdout
+     */
+    public function setStdout(?string $stdout): void
+    {
+        $this->stdout = $stdout;
+    }
+
+    /**
      * @return string
      */
     public function getAlert(): ?string
     {
         return $this->alert;
+    }
+
+    /**
+     * @param string|null $alert
+     */
+    public function setAlert(?string $alert): void
+    {
+        $this->alert = $alert;
     }
 
     public function hasSpecialOutput(): bool
