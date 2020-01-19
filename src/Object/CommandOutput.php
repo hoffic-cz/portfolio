@@ -13,6 +13,9 @@ class CommandOutput
     /** @var string|null */
     private $alert;
 
+    /** @var string|null */
+    private $trigger;
+
     /**
      * CommandOutput constructor.
      * @param string|null $stdout
@@ -43,5 +46,21 @@ class CommandOutput
     public function hasSpecialOutput(): bool
     {
         return !is_null($this->alert);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTrigger(): ?string
+    {
+        return $this->trigger;
+    }
+
+    /**
+     * @param string|null $trigger
+     */
+    public function setTrigger(?string $trigger): void
+    {
+        $this->trigger = $trigger;
     }
 }

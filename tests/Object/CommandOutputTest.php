@@ -45,4 +45,23 @@ class CommandOutputTest extends BaseTest
         $output = new CommandOutput(null, 'Hello Clem!');
         self::assertEquals('Hello Clem!', $output->getAlert());
     }
+
+    public function testEmptyTrigger1()
+    {
+        $output = new CommandOutput();
+        self::assertNull($output->getTrigger());
+    }
+
+    public function testEmptyTrigger2()
+    {
+        $output = new CommandOutput('Hello', 'Clem!');
+        self::assertNull($output->getTrigger());
+    }
+
+    public function testValueTrigger()
+    {
+        $output = new CommandOutput();
+        $output->setTrigger('Hello Clem!');
+        self::assertEquals('Hello Clem!', $output->getTrigger());
+    }
 }
