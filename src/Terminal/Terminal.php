@@ -12,6 +12,7 @@ use App\Terminal\Command\ClearCommand;
 use App\Terminal\Command\IntroCommand;
 use App\Terminal\Command\NotFoundCommand;
 use App\Terminal\Command\PwdCommand;
+use App\Terminal\Command\TailCommand;
 
 class Terminal
 {
@@ -27,6 +28,9 @@ class Terminal
     /** @var CatCommand */
     private $catCommand;
 
+    /** @var TailCommand */
+    private $tailCommand;
+
     /** @var PwdCommand */
     private $pwdCommand;
 
@@ -39,6 +43,7 @@ class Terminal
      * @param IntroCommand $introCommand
      * @param ClearCommand $clearCommand
      * @param CatCommand $catCommand
+     * @param TailCommand $tailCommand
      * @param PwdCommand $pwdCommand
      * @param CdCommand $cdCommand
      */
@@ -47,6 +52,7 @@ class Terminal
         IntroCommand $introCommand,
         ClearCommand $clearCommand,
         CatCommand $catCommand,
+        TailCommand $tailCommand,
         PwdCommand $pwdCommand,
         CdCommand $cdCommand
     )
@@ -55,6 +61,7 @@ class Terminal
         $this->introCommand = $introCommand;
         $this->clearCommand = $clearCommand;
         $this->catCommand = $catCommand;
+        $this->tailCommand = $tailCommand;
         $this->pwdCommand = $pwdCommand;
         $this->cdCommand = $cdCommand;
     }
@@ -74,6 +81,9 @@ class Terminal
                 break;
             case 'cat':
                 $output = $this->catCommand->execute($parts);
+                break;
+            case 'tail':
+                $output = $this->tailCommand->execute($parts);
                 break;
             case 'pwd':
                 $output = $this->pwdCommand->execute($parts);
