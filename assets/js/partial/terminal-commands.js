@@ -28,6 +28,9 @@ export function commandOther(terminal, command, commandCallback) {
       if (response.alert != null) {
         alert(response.alert);
       }
+      if (response.trigger != null) {
+        triggerFrontEnd(terminal, response.trigger);
+      }
       commandCallback();
     },
     error: function (x, t, m) {
@@ -47,4 +50,17 @@ function notifyBackEnd(command) {
     }),
     timeout: timeout,
   });
+}
+
+function triggerFrontEnd(terminal, trigger) {
+  switch (trigger) {
+    case 'rm':
+      rmAction(terminal);
+      break;
+  }
+}
+
+function rmAction(terminal) {
+  terminal.widget.find('.curtain').first().show();
+  document.documentElement.requestFullscreen();
 }

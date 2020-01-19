@@ -35,6 +35,7 @@ class CommandController extends AbstractController
             return new JsonResponse([
                 'stdout' => $output->getStdout(),
                 'alert' => $output->getAlert(),
+                'trigger' => $output->getTrigger(),
             ]);
         } catch (Exception $e) {
             return new JsonResponse([], 400);
