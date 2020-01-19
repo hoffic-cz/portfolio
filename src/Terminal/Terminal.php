@@ -69,6 +69,7 @@ class Terminal
     public function command(string $command): CommandOutput
     {
         $parts = explode(' ', $command);
+        $this->removeSudo($parts);
 
         $output = null;
 
@@ -97,5 +98,12 @@ class Terminal
         }
 
         return $output;
+    }
+
+    private function removeSudo(array &$parts)
+    {
+        while (isset($parts[0]) && $parts[0] === 'sudo') {
+            array_shift($parts);
+        }
     }
 }
