@@ -32,4 +32,14 @@ class IntroTest extends BaseTest
 
         self::assertFalse($output->hasSpecialOutput());
     }
+
+    public function testContainsHints1()
+    {
+        $this->assertContains("'ls'", self::executeIndependentCommand('intro'));
+    }
+
+    public function testContainsHints2()
+    {
+        $this->assertContains("'help <command>'", self::executeIndependentCommand('intro'));
+    }
 }

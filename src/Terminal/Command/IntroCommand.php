@@ -16,9 +16,12 @@ class IntroCommand implements Command
 
         I'm a software engineer based in London/Prague specializing in building
 
-        reliable back ends, helping out with smaller scale DevOps and soaking in
+        reliable back ends, helping out with smaller scale DevOps and training
 
-        knowledge like a sponge.
+        a neural network for best engineering practices.
+
+
+        You might want to try 'ls' or 'help <command>' to get started.
 
 
 STDOUT
