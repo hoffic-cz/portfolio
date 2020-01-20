@@ -5,6 +5,10 @@ import {commandExit, commandOther} from "./terminal-commands";
 
 const promptText = 'visitor@hoffic.dev:~$ ';
 
+/**
+ * Constructs and configures the terminal element.
+ * @param terminalElement
+ */
 export function setUpTerminal(terminalElement) {
   const terminal = new Terminal({
     theme: {
@@ -25,6 +29,10 @@ export function setUpTerminal(terminalElement) {
   populateTerminal(terminal);
 }
 
+/**
+ * Configures terminal input handling.
+ * @param terminal
+ */
 function configureInput(terminal) {
   terminal.inputBuffer = '';
 
@@ -47,15 +55,34 @@ function configureInput(terminal) {
   }
 }
 
+/**
+ * Populates the terminal initially.
+ * @param terminal
+ */
 function populateTerminal(terminal) {
   terminal.prompt();
-  terminal.writeln('intro');
 
-  commandOther(terminal, 'intro', function () {
+  typeAndExecuteCommand(terminal, 'intro')
+}
+
+/**
+ * Types in and executes a command.
+ * @param terminal
+ * @param commandName
+ */
+function typeAndExecuteCommand(terminal, commandName) {
+  terminal.writeln(commandName);
+
+  command(terminal, commandName, function () {
     terminal.prompt();
   });
 }
 
+/**
+ * Handles pressing enter.
+ * @param terminal
+ * @param key
+ */
 function keyEnter(terminal, key) {
   terminal.write('\n');
   terminal.write(key);
@@ -67,6 +94,10 @@ function keyEnter(terminal, key) {
   });
 }
 
+/**
+ * Handles pressing backspace.
+ * @param terminal
+ */
 function keyBackspace(terminal) {
   if (terminal._core.buffer.x > promptText.length) {
     terminal.write('\b \b');
@@ -76,6 +107,11 @@ function keyBackspace(terminal) {
   }
 }
 
+/**
+ * Handles pressing non-special keys.
+ * @param terminal
+ * @param key
+ */
 function keyOther(terminal, key) {
   // Excluding common non-printable characters
   if (key.charCodeAt(0) >= 32 && key.charCodeAt(0) !== 127) {
@@ -84,6 +120,12 @@ function keyOther(terminal, key) {
   }
 }
 
+/**
+ * Executes a command in the terminal. Writes the output out.
+ * @param terminal
+ * @param command
+ * @param commandCallback
+ */
 function command(terminal, command, commandCallback) {
   switch (command) {
     case '':
@@ -98,8 +140,16 @@ function command(terminal, command, commandCallback) {
   }
 }
 
+/**
+ * Configures actions for terminal buttons.
+ * @param terminal
+ */
 function configureButtons(terminal) {
   terminal.widget.find('.close-button img').first().click(function () {
     commandExit(terminal);
+  });
+
+  terminal.widget.find('.item.contact').first().click(function () {
+    typeAndExecuteCommand(terminal, 'contact');
   });
 }

@@ -9,6 +9,7 @@ use App\Object\CommandOutput;
 use App\Terminal\Command\CatCommand;
 use App\Terminal\Command\CdCommand;
 use App\Terminal\Command\ClearCommand;
+use App\Terminal\Command\ContactCommand;
 use App\Terminal\Command\IntroCommand;
 use App\Terminal\Command\NotFoundCommand;
 use App\Terminal\Command\PwdCommand;
@@ -41,6 +42,9 @@ class Terminal
     /** @var RmCommand */
     private $rmCommand;
 
+    /** @var ContactCommand */
+    private $contactCommand;
+
     /**
      * Terminal constructor.
      * @param NotFoundCommand $notFoundCommand
@@ -51,6 +55,7 @@ class Terminal
      * @param PwdCommand $pwdCommand
      * @param CdCommand $cdCommand
      * @param RmCommand $rmCommand
+     * @param ContactCommand $contactCommand
      */
     public function __construct(
         NotFoundCommand $notFoundCommand,
@@ -60,7 +65,8 @@ class Terminal
         TailCommand $tailCommand,
         PwdCommand $pwdCommand,
         CdCommand $cdCommand,
-        RmCommand $rmCommand
+        RmCommand $rmCommand,
+        ContactCommand $contactCommand
     )
     {
         $this->notFoundCommand = $notFoundCommand;
@@ -71,6 +77,7 @@ class Terminal
         $this->pwdCommand = $pwdCommand;
         $this->cdCommand = $cdCommand;
         $this->rmCommand = $rmCommand;
+        $this->contactCommand = $contactCommand;
     }
 
     public function command(string $command): CommandOutput
@@ -101,6 +108,9 @@ class Terminal
                 break;
             case 'rm':
                 $output = $this->rmCommand->execute($parts);
+                break;
+            case 'contact':
+                $output = $this->contactCommand->execute($parts);
                 break;
             default:
                 $output = $this->notFoundCommand->execute($parts);
