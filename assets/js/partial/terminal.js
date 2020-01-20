@@ -3,7 +3,10 @@ import {Terminal} from "xterm";
 import {FitAddon} from "xterm-addon-fit";
 import {commandExit, commandOther} from "./terminal-commands";
 
-const promptText = 'visitor@hoffic.dev:~$ ';
+const promptText = '\x1b[1;32mvisitor@hoffic.dev\x1b[1;32m\x1b[1;37m:\x1b[1;34m~\x1b[1;0m$ ';
+const promptTextLength = promptText.length
+    - ((promptText.match(/\x1b\[1;3.m/g) || []).length * 7)
+    - ((promptText.match(/\x1b\[1;0m/g) || []).length * 6);
 
 /**
  * Constructs and configures the terminal element.
@@ -52,6 +55,7 @@ function configureInput(terminal) {
 
   terminal.prompt = function () {
     terminal.write(promptText);
+    terminal.write('\x1b[1;0m'); // Reset the colour
   }
 }
 
@@ -99,7 +103,7 @@ function keyEnter(terminal, key) {
  * @param terminal
  */
 function keyBackspace(terminal) {
-  if (terminal._core.buffer.x > promptText.length) {
+  if (terminal._core.buffer.x > promptTextLength) {
     terminal.write('\b \b');
     terminal.inputBuffer = terminal.inputBuffer.substring(
         0,
