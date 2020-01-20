@@ -39,8 +39,12 @@ class SourceArt
              * In case the source isn't long enough to cover the graphics we generate more comments.
              */
             if (empty($parts)) {
-                $parts = $this->getFilling();
-                $usedFilling = true;
+                if ($usedFilling) {
+                    $parts = $this->getFilling();
+                } else {
+                    $usedFilling = true;
+                    $parts = ['<!--'];
+                }
             }
             /*
              * If the cursor has run out of the image on the right we jump to a new line.
@@ -81,6 +85,13 @@ class SourceArt
         }
 
         if (!$usedFilling) {
+            $output .= '<!-- ';
+        }
+
+        $output .= $this->getFormattedGitLabLink();
+
+        if (!$usedFilling) {
+            $output .= '-->';
             $output .= join(' ', $parts);
         }
 
@@ -169,6 +180,23 @@ class SourceArt
      */
     private function getFilling(): array
     {
-        return explode(' ', '<!-- Hi, I am Petr! -->');
+        return explode(' ', 'Hi, I am Petr!');
+    }
+
+    private function getFormattedGitLabLink(): string
+    {
+        return <<<'MESSAGE'
+
+
+
+        _______________________________________________________________________________________________________________________________________________
+        |                                               |                                                      |                                      |
+        |        For the actual source code see:        |        https://gitlab.com/hoffic.cz/portfolio        |        src/Util/SourceArt.php        |
+        |_______________________________________________|______________________________________________________|______________________________________|
+
+
+
+
+MESSAGE;
     }
 }
