@@ -92,6 +92,9 @@ USER nobody
 ENV PHP_IDE_CONFIG="serverName=portfolio.local"
 ENV XDEBUG_CONFIG="idekey=PHPSTORM"
 
+# Disable essentially
+HEALTHCHECK --timeout=10s CMD true
+
 
 
 
