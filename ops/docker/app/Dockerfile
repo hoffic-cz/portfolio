@@ -43,7 +43,8 @@ COPY ops/docker/app/config/supervisord.conf /etc/supervisor/conf.d/supervisord.c
 
 # Create cache directories
 RUN mkdir -p /.composer \
-  && mkdir -p /.cache/yarn
+  && mkdir -p /.cache/yarn \
+  && mkdir -p /.yarn
 
 # Make sure files/folders needed by the processes are accessable when they run under the nobody user
 RUN chown -R nobody.nobody /run && \
@@ -51,13 +52,17 @@ RUN chown -R nobody.nobody /run && \
   chown -R nobody.nobody /var/tmp && \
   chown -R nobody.nobody /var/log && \
   chown -R nobody.nobody /.composer && \
-  chown -R nobody.nobody /.cache/yarn
+  chown -R nobody.nobody /.cache/yarn && \
+  chown -R nobody.nobody /.yarn
 
 # Setup document root
 RUN mkdir -p /var/www/html
 
 # Set the workign dir to the document root
 WORKDIR /var/www/html
+
+# Set nobody the owner of the work dir
+RUN chown nobody /var/www/html
 
 # Switch to use a non-root user from here on
 USER nobody
@@ -103,6 +108,23 @@ FROM base as prod
 
 ENV APP_ENV=prod
 
+USER root
+
+RUN apk add --no-cache \
+  composer \
+  nodejs \
+  yarn \
+  php7-xdebug
+
+USER nobody
+
 # Add application
-WORKDIR /var/www/html
-COPY --chown=nobody ./ /var/www/html/
+COPY --chown=nobody . .
+
+RUN composer install --no-interaction --no-ansi
+
+RUN yarn install
+
+RUN yarn encore production
+
+RUN php ./bin/phpunit

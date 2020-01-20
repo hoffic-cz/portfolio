@@ -34,4 +34,4 @@ services:
         class: App\Util\SourceArt
         autowire: false
         arguments:
-            - '%source_art_image%'
+            - '%kernel.root_dir%/%source_art_image%'
