@@ -7,6 +7,23 @@ namespace App\Util;
 
 class SourceArt
 {
+    /** @var string */
+    private $imagePath;
+
+    /**
+     * SourceArt constructor.
+     * @param string $imagePath
+     */
+    public function __construct(string $imagePath)
+    {
+        $this->imagePath = $imagePath;
+    }
+
+    /**
+     * The algorithm for distributing source code so it looks like the graphics.
+     * @param string $source
+     * @return string
+     */
     public function draw(string $source): string
     {
         $map = $this->getBitmap();
@@ -18,24 +35,44 @@ class SourceArt
         $usedFilling = false;
 
         while ($line < count($map)) {
+            /*
+             * In case the source isn't long enough to cover the graphics we generate more comments.
+             */
             if (empty($parts)) {
                 $parts = $this->getFilling();
                 $usedFilling = true;
             }
+            /*
+             * If the cursor has run out of the image on the right we jump to a new line.
+             */
             if ($position >= count($map[0])) {
                 $output .= "\n";
                 $line++;
                 $position = 0;
             } else {
                 [$distance, $length] = $this->getNextBlock($map, $line, $position);
+                /*
+                 * If there are no more blocks to the right, we jump to a new line.
+                 */
                 if (is_null($distance)) {
                     $output .= "\n";
                     $line++;
                     $position = 0;
                 } elseif ($distance === 0) {
-                    $part = array_shift($parts);
-                    $output .= $part . ' ';
-                    $position += strlen($part) + 1;
+                    $part = $parts[0];
+                    /*
+                     * If this isn't the first position in the block and the part is really long,
+                     * we jump to the next block and try to place the part there so that we utilize
+                     * the whole block.
+                     */
+                    if (strlen($part) > $length * 2 && $position > 0 && $map[$line][$position - 1]) {
+                        $output .= ' ';
+                        $position++;
+                    } else {
+                        $output .= $part . ' ';
+                        $position += strlen($part) + 1;
+                        array_shift($parts);
+                    }
                 } else {
                     $output .= str_repeat(' ', $distance);
                     $position += $distance;
@@ -51,7 +88,8 @@ class SourceArt
     }
 
     /**
-     * Calculates the distance and the length of the next block on the line.
+     * Calculates the distance and the length of the next block on the line. A block is made of a
+     * sequence of characters that are neither a space or a new line.
      *
      * @param array $map
      * @param int $line
@@ -83,9 +121,13 @@ class SourceArt
         }
     }
 
+    /**
+     * Converts the
+     * @return array
+     */
     private function getBitmap(): array
     {
-        $image = imagecreatefrompng('../graphics/source_art.png');
+        $image = imagecreatefrompng($this->imagePath);
 
         $width = imagesx($image);
         $height = imagesy($image);
@@ -107,6 +149,11 @@ class SourceArt
         return $bitmap;
     }
 
+    /**
+     * Splits the source code into parts that don't mind being separated by spaces or new lines.
+     * @param string $source
+     * @return array|false|string[]
+     */
     private function splitSource(string $source)
     {
         $source = preg_replace('/(?:><)/', '> <', $source);
@@ -116,6 +163,10 @@ class SourceArt
         return preg_split('/[ \n]+/', $source);
     }
 
+    /**
+     * Returns an array of filling parts used when the source code isn't enough to cover the image.
+     * @return array
+     */
     private function getFilling(): array
     {
         return explode(' ', '<!-- Hi, I am Petr! -->');

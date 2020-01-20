@@ -4,6 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    source_art_image: '../graphics/source_art.png'
 
 services:
     # default configuration for services in *this* file
@@ -28,3 +29,9 @@ services:
 
     App\Terminal\Command:
         lazy: true
+
+    App\Util\SourceArt:
+        class: App\Util\SourceArt
+        autowire: false
+        arguments:
+            - '%source_art_image%'
