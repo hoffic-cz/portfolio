@@ -16,9 +16,10 @@ variables:
 build:
   stage: build
   image: docker:stable
+  timeout: 10 minutes
   artifacts:
     paths:
-      - ./coverage.xml
+      - ./coverage/
     expire_in: 30 days
   script:
     - docker build --pull
@@ -26,16 +27,20 @@ build:
       --tag="$CONTAINER_TEST_IMAGE"
       --target=prod
       ./
-    - docker push $CONTAINER_TEST_IMAGE
+    - mkdir -p ./coverage/
     - docker create -it --name dummy $CONTAINER_TEST_IMAGE sh
-    - docker cp dummy:/var/www/html/var/coverage.xml ./coverage.xml
+    - docker cp dummy:/var/www/html/var/coverage/ ./coverage/
     - docker rm -f dummy
+    - docker push $CONTAINER_TEST_IMAGE
 
 sonarcloud-check:
   stage: sonarcloud-check
   image:
     name: sonarsource/sonar-scanner-cli:latest
     entrypoint: [""]
+  timeout: 10 minutes
+  dependencies:
+    - build
   cache:
     key: "${CI_JOB_NAME}"
     paths:

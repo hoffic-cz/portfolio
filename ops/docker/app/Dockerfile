@@ -133,7 +133,7 @@ RUN yarn install
 
 RUN yarn encore production
 
-RUN php ./bin/phpunit --coverage-clover ./var/coverage.xml
+RUN php ./bin/phpunit
 
 
 
