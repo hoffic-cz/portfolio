@@ -27,9 +27,8 @@ build:
       --tag="$CONTAINER_TEST_IMAGE"
       --target=prod
       ./
-    - mkdir -p ./coverage/
     - docker create -it --name dummy $CONTAINER_TEST_IMAGE sh
-    - docker cp dummy:/var/www/html/var/coverage/ ./coverage/
+    - docker cp dummy:/var/www/html/var/coverage/ ./
     - docker rm -f dummy
     - docker push $CONTAINER_TEST_IMAGE
 
