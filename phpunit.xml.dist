@@ -31,4 +31,9 @@
     <listeners>
         <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
     </listeners>
+
+    <logging>
+        <log type="coverage-clover" target="var/coverage/clover.xml"/>
+        <log type="junit" target="var/coverage/junit-logfile.xml"/>
+    </logging>
 </phpunit>

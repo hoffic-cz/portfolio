@@ -113,10 +113,14 @@ ENV APP_ENV=prod
 
 USER root
 
+# For coverage. This will not be included in the prod stage.
+COPY ops/docker/app/config/php_xdebug.ini /etc/php7/conf.d/zzz_php_xdebug.ini
+
 RUN apk add --no-cache \
   composer \
   nodejs \
-  yarn
+  yarn \
+  php7-xdebug
 
 USER nobody
 
@@ -140,4 +144,4 @@ FROM base as prod
 ENV APP_ENV=prod
 
 # Copy built application
-COPY --chown=nobody . .
+COPY --chown=nobody --from=build /var/www/html/ /var/www/html/

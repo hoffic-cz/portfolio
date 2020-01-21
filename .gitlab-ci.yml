@@ -1,3 +1,7 @@
+stages:
+  - build
+  - sonarcloud-check
+
 services:
   - docker:dind
 
@@ -10,18 +14,33 @@ variables:
   GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
 
 build:
+  stage: build
   image: docker:stable
+  timeout: 10 minutes
+  artifacts:
+    paths:
+      - ./coverage/
+    expire_in: 30 days
   script:
     - docker build --pull
       --file="./ops/docker/app/Dockerfile"
       --tag="$CONTAINER_TEST_IMAGE"
+      --target=prod
       ./
+    - mkdir -p ./coverage/
+    - docker create -it --name dummy $CONTAINER_TEST_IMAGE sh
+    - docker cp dummy:/var/www/html/var/coverage/ ./coverage/
+    - docker rm -f dummy
     - docker push $CONTAINER_TEST_IMAGE
 
 sonarcloud-check:
+  stage: sonarcloud-check
   image:
     name: sonarsource/sonar-scanner-cli:latest
     entrypoint: [""]
+  timeout: 10 minutes
+  dependencies:
+    - build
   cache:
     key: "${CI_JOB_NAME}"
     paths:
@@ -30,7 +49,3 @@ sonarcloud-check:
     - mkdir -p .sonar/cache
   script:
     - sonar-scanner
-  only:
-    - merge_requests
-    - master
-    - develop
