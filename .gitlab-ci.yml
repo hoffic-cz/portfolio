@@ -49,3 +49,6 @@ sonarcloud-check:
     - mkdir -p .sonar/cache
   script:
     - sonar-scanner
+  only:
+    - master
+    - merge_requests
