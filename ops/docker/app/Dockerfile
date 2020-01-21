@@ -106,8 +106,9 @@ HEALTHCHECK --timeout=10s CMD true
 
 
 
-FROM base as prod
+FROM base as build
 
+# We want the artifacts to be built using production settings.
 ENV APP_ENV=prod
 
 USER root
@@ -119,7 +120,7 @@ RUN apk add --no-cache \
 
 USER nobody
 
-# Add application
+# Add source code
 COPY --chown=nobody . .
 
 RUN composer install --no-interaction --no-ansi
@@ -129,3 +130,14 @@ RUN yarn install
 RUN yarn encore production
 
 RUN php ./bin/phpunit
+
+
+
+
+
+FROM base as prod
+
+ENV APP_ENV=prod
+
+# Copy built application
+COPY --chown=nobody . .
