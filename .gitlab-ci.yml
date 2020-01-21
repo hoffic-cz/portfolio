@@ -19,7 +19,7 @@ build:
   timeout: 10 minutes
   artifacts:
     paths:
-      - ./coverage/
+      - ./var/coverage/
     expire_in: 30 days
   script:
     - docker build --pull
@@ -27,9 +27,9 @@ build:
       --tag="$CONTAINER_TEST_IMAGE"
       --target=prod
       ./
-    - mkdir -p ./coverage/
     - docker create -it --name dummy $CONTAINER_TEST_IMAGE sh
-    - docker cp dummy:/var/www/html/var/coverage/ ./coverage/
+    - mkdir -p ./var/
+    - docker cp dummy:/var/www/html/var/coverage/ ./var/
     - docker rm -f dummy
     - docker push $CONTAINER_TEST_IMAGE
 
@@ -49,3 +49,6 @@ sonarcloud-check:
     - mkdir -p .sonar/cache
   script:
     - sonar-scanner
+  only:
+    - master
+    - merge_requests
