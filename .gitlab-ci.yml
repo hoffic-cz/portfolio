@@ -51,4 +51,3 @@ sonarcloud-check:
     - sonar-scanner
   only:
     - master
-    - merge_requests
