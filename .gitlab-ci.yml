@@ -19,7 +19,7 @@ build:
   timeout: 10 minutes
   artifacts:
     paths:
-      - ./coverage/
+      - ./var/coverage/
     expire_in: 30 days
   script:
     - docker build --pull
@@ -28,7 +28,8 @@ build:
       --target=prod
       ./
     - docker create -it --name dummy $CONTAINER_TEST_IMAGE sh
-    - docker cp dummy:/var/www/html/var/coverage/ ./
+    - mkdir -p ./var/
+    - docker cp dummy:/var/www/html/var/coverage/ ./var/
     - docker rm -f dummy
     - docker push $CONTAINER_TEST_IMAGE
 

@@ -135,6 +135,9 @@ RUN yarn encore production
 
 RUN php ./bin/phpunit
 
+RUN sed -i 's+/var/www/html/+./+g' var/coverage/clover.xml \
+  && sed -i 's+/var/www/html/+./+g' var/coverage/junit-logfile.xml
+
 
 
 
