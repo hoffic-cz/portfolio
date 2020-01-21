@@ -1,0 +1,17 @@
+services:
+  - docker:dind
+
+before_script:
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+
+variables:
+  CONTAINER_TEST_IMAGE: $CI_REGISTRY_IMAGE/test:$CI_COMMIT_SHORT_SHA
+
+build:
+  image: docker:stable
+  script:
+    - docker build --pull
+      --file="./ops/docker/app/Dockerfile"
+      --tag="$CONTAINER_TEST_IMAGE"
+      ./
+    - docker push $CONTAINER_TEST_IMAGE

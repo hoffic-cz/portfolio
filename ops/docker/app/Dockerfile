@@ -36,14 +36,15 @@ COPY ops/docker/app/config/nginx.conf /etc/nginx/nginx.conf
 
 # Configure PHP-FPM
 COPY ops/docker/app/config/fpm-pool.conf /etc/php7/php-fpm.d/www.conf
-COPY ops/docker/app/config/php.ini /etc/php7/conf.d/zzz_custom.ini
+COPY ops/docker/app/config/php.ini /etc/php7/conf.d/zzz_php.ini
 
 # Configure supervisord
 COPY ops/docker/app/config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Create cache directories
 RUN mkdir -p /.composer \
-  && mkdir -p /.cache/yarn
+  && mkdir -p /.cache/yarn \
+  && mkdir -p /.yarn
 
 # Make sure files/folders needed by the processes are accessable when they run under the nobody user
 RUN chown -R nobody.nobody /run && \
@@ -51,13 +52,17 @@ RUN chown -R nobody.nobody /run && \
   chown -R nobody.nobody /var/tmp && \
   chown -R nobody.nobody /var/log && \
   chown -R nobody.nobody /.composer && \
-  chown -R nobody.nobody /.cache/yarn
+  chown -R nobody.nobody /.cache/yarn && \
+  chown -R nobody.nobody /.yarn
 
 # Setup document root
 RUN mkdir -p /var/www/html
 
 # Set the workign dir to the document root
 WORKDIR /var/www/html
+
+# Set nobody the owner of the work dir
+RUN chown nobody /var/www/html
 
 # Switch to use a non-root user from here on
 USER nobody
@@ -81,6 +86,8 @@ ENV APP_ENV=dev
 
 USER root
 
+COPY ops/docker/app/config/php_xdebug.ini /etc/php7/conf.d/zzz_php_xdebug.ini
+
 RUN apk add --no-cache \
   composer \
   nodejs \
@@ -99,10 +106,38 @@ HEALTHCHECK --timeout=10s CMD true
 
 
 
+FROM base as build
+
+# We want the artifacts to be built using production settings.
+ENV APP_ENV=prod
+
+USER root
+
+RUN apk add --no-cache \
+  composer \
+  nodejs \
+  yarn
+
+USER nobody
+
+# Add source code
+COPY --chown=nobody . .
+
+RUN composer install --no-interaction --no-ansi
+
+RUN yarn install
+
+RUN yarn encore production
+
+RUN php ./bin/phpunit
+
+
+
+
+
 FROM base as prod
 
 ENV APP_ENV=prod
 
-# Add application
-WORKDIR /var/www/html
-COPY --chown=nobody ./ /var/www/html/
+# Copy built application
+COPY --chown=nobody . .
