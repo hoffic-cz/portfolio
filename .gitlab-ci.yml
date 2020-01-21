@@ -26,6 +26,8 @@ sonarcloud-check:
     key: "${CI_JOB_NAME}"
     paths:
       - .sonar/cache
+  before_script:
+    - mkdir -p .sonar/cache
   script:
     - sonar-scanner
   only:
