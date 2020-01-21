@@ -36,7 +36,7 @@ COPY ops/docker/app/config/nginx.conf /etc/nginx/nginx.conf
 
 # Configure PHP-FPM
 COPY ops/docker/app/config/fpm-pool.conf /etc/php7/php-fpm.d/www.conf
-COPY ops/docker/app/config/php.ini /etc/php7/conf.d/zzz_custom.ini
+COPY ops/docker/app/config/php.ini /etc/php7/conf.d/zzz_php.ini
 
 # Configure supervisord
 COPY ops/docker/app/config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
@@ -86,6 +86,8 @@ ENV APP_ENV=dev
 
 USER root
 
+COPY ops/docker/app/config/php_xdebug.ini /etc/php7/conf.d/zzz_php_xdebug.ini
+
 RUN apk add --no-cache \
   composer \
   nodejs \
@@ -113,8 +115,7 @@ USER root
 RUN apk add --no-cache \
   composer \
   nodejs \
-  yarn \
-  php7-xdebug
+  yarn
 
 USER nobody
 
