@@ -9,115 +9,65 @@ use App\Object\CommandOutput;
 use App\Terminal\Command\CatCommand;
 use App\Terminal\Command\CdCommand;
 use App\Terminal\Command\ClearCommand;
+use App\Terminal\Command\Command;
 use App\Terminal\Command\ContactCommand;
 use App\Terminal\Command\IntroCommand;
+use App\Terminal\Command\LsCommand;
 use App\Terminal\Command\NotFoundCommand;
 use App\Terminal\Command\PwdCommand;
 use App\Terminal\Command\RmCommand;
 use App\Terminal\Command\TailCommand;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class Terminal
 {
-    /** @var NotFoundCommand */
-    private $notFoundCommand;
+    public const COMMANDS = [
+        'intro' => [IntroCommand::class, true],
+        'clear' => [ClearCommand::class, true],
+        'cat' => [CatCommand::class, true],
+        'tail' => [TailCommand::class, true],
+        'pwd' => [PwdCommand::class, true],
+        'cd' => [CdCommand::class, true],
+        'rm' => [RmCommand::class, true],
+        'contact' => [ContactCommand::class, true],
+        'ls' => [LsCommand::class, true],
+        'help' => [null, true],
+        'man' => [null, true],
+        'egg' => [null, false],
+    ];
 
-    /** @var IntroCommand */
-    private $introCommand;
+    public const DIRECTORIES = [
+        'secrets'
+    ];
 
-    /** @var ClearCommand */
-    private $clearCommand;
-
-    /** @var CatCommand */
-    private $catCommand;
-
-    /** @var TailCommand */
-    private $tailCommand;
-
-    /** @var PwdCommand */
-    private $pwdCommand;
-
-    /** @var CdCommand */
-    private $cdCommand;
-
-    /** @var RmCommand */
-    private $rmCommand;
-
-    /** @var ContactCommand */
-    private $contactCommand;
+    /** @var ContainerInterface */
+    private $container;
 
     /**
      * Terminal constructor.
-     * @param NotFoundCommand $notFoundCommand
-     * @param IntroCommand $introCommand
-     * @param ClearCommand $clearCommand
-     * @param CatCommand $catCommand
-     * @param TailCommand $tailCommand
-     * @param PwdCommand $pwdCommand
-     * @param CdCommand $cdCommand
-     * @param RmCommand $rmCommand
-     * @param ContactCommand $contactCommand
+     * @param ContainerInterface $container
      */
-    public function __construct(
-        NotFoundCommand $notFoundCommand,
-        IntroCommand $introCommand,
-        ClearCommand $clearCommand,
-        CatCommand $catCommand,
-        TailCommand $tailCommand,
-        PwdCommand $pwdCommand,
-        CdCommand $cdCommand,
-        RmCommand $rmCommand,
-        ContactCommand $contactCommand
-    )
+    public function __construct(ContainerInterface $container)
     {
-        $this->notFoundCommand = $notFoundCommand;
-        $this->introCommand = $introCommand;
-        $this->clearCommand = $clearCommand;
-        $this->catCommand = $catCommand;
-        $this->tailCommand = $tailCommand;
-        $this->pwdCommand = $pwdCommand;
-        $this->cdCommand = $cdCommand;
-        $this->rmCommand = $rmCommand;
-        $this->contactCommand = $contactCommand;
+        $this->container = $container;
     }
 
     public function command(string $command): CommandOutput
     {
         $parts = explode(' ', $command);
         $this->removeSudo($parts);
+        $name = $parts[0];
 
-        $output = null;
-
-        switch ($parts[0]) {
-            case 'intro':
-                $output = $this->introCommand->execute($parts);
-                break;
-            case 'clear':
-                $output = $this->clearCommand->execute($parts);
-                break;
-            case 'cat':
-                $output = $this->catCommand->execute($parts);
-                break;
-            case 'tail':
-                $output = $this->tailCommand->execute($parts);
-                break;
-            case 'pwd':
-                $output = $this->pwdCommand->execute($parts);
-                break;
-            case 'cd':
-                $output = $this->cdCommand->execute($parts);
-                break;
-            case 'rm':
-                $output = $this->rmCommand->execute($parts);
-                break;
-            case 'contact':
-                $output = $this->contactCommand->execute($parts);
-                break;
-            default:
-                $output = $this->notFoundCommand->execute($parts);
-                break;
+        /** @var Command $implementation */
+        if (isset(self::COMMANDS[$name])) {
+            $implementation = $this->container->get(self::COMMANDS[$name][0]);
+        } elseif (in_array($name, self::DIRECTORIES)) {
+            return new CommandOutput(sprintf('bash: %s: Is a directory', $name));
+        } else {
+            $implementation = $this->container->get(NotFoundCommand::class);
         }
 
-        return $output;
+        return $implementation->execute($parts);
     }
 
     private function removeSudo(array &$parts)

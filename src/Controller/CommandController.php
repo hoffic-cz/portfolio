@@ -10,6 +10,7 @@ use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class CommandController extends AbstractController
@@ -38,7 +39,7 @@ class CommandController extends AbstractController
                 'trigger' => $output->getTrigger(),
             ]);
         } catch (Exception $e) {
-            return new JsonResponse([], 400);
+            return new JsonResponse([], Response::HTTP_BAD_REQUEST);
         }
     }
 }

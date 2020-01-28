@@ -27,7 +27,9 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    App\Terminal\Command:
+    App\Terminal\Command\:
+        resource: '../src/Terminal/Command/*'
+        public: true
         lazy: true
 
     App\Util\SourceArt:
