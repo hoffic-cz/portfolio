@@ -52,7 +52,12 @@ class Terminal
         $this->container = $container;
     }
 
-    public function command(string $command): CommandOutput
+    /**
+     * @param string $command
+     * @param string|null $uid
+     * @return CommandOutput
+     */
+    public function command(string $command, ?string $uid = null): CommandOutput
     {
         $parts = explode(' ', $command);
         $this->removeSudo($parts);
