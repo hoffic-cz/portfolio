@@ -10,20 +10,29 @@ use App\Terminal\History;
 
 class IntroCommand implements Command
 {
+    /**
+     * @param array $params
+     * @param History|null $history
+     * @return CommandOutput
+     */
     public function execute(array $params, ?History $history = null): CommandOutput
     {
-        if (!is_null($history) && $history->hasNote('exit_time')) {
-            $amount = microtime(true) - $history->getNote('exit_time');
-            $history->unsetNote('exit_time');
-
-            $output = new CommandOutput();
-            $output->setAlert(sprintf(
-                'Well done! It took you %.2f seconds to reopen the terminal!',
-                $amount));
-
-            return $output;
+        if ($history->hasNote(ExitCommand::HAS_REOPENED)
+            && $history->hasNote(ExitCommand::EXIT_TIME_KEY)) {
+            return $this->improveScore($history);
+        } elseif ($history->hasNote(ExitCommand::EXIT_TIME_KEY)) {
+            return $this->reopeningTerminal($history);
         } else {
-            return new CommandOutput(<<<STDOUT
+            return $this->classicIntro();
+        }
+    }
+
+    /**
+     * @return CommandOutput
+     */
+    private function classicIntro(): CommandOutput
+    {
+        return new CommandOutput(/** @lang text */ <<<STDOUT
 
 
         I'm a software engineer based in London/Prague specializing in building
@@ -37,7 +46,44 @@ class IntroCommand implements Command
 
 
 STDOUT
-            );
-        }
+        );
+    }
+
+    /**
+     * @param History $history
+     * @return CommandOutput
+     */
+    private function reopeningTerminal(History $history): CommandOutput
+    {
+        $amount = $this->gatherTimeAmount($history);
+
+        $output = $this->classicIntro();
+        $output->setAlert(sprintf(
+            'Well done! It took you %.2f seconds to reopen the terminal!',
+            $amount));
+
+        return $output;
+    }
+
+    private function improveScore(History $history): CommandOutput
+    {
+        $amount = $this->gatherTimeAmount($history);
+
+        $output = $this->classicIntro();
+
+        $output->setAlert(sprintf(
+            "Trying to improve your score? That's not fair :P Btw it was %.2f seconds...",
+            $amount));
+
+        return $output;
+    }
+
+    private function gatherTimeAmount(History $history): float
+    {
+        $amount = microtime(true) - $history->getNote(ExitCommand::EXIT_TIME_KEY);
+        $history->unsetNote(ExitCommand::EXIT_TIME_KEY);
+        $history->setNote(ExitCommand::HAS_REOPENED, true);
+
+        return $amount;
     }
 }

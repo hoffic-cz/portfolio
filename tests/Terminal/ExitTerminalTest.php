@@ -61,4 +61,18 @@ class ExitTerminalTest extends BaseTest
             'Trying to improve your score?',
             self::executeInSessionRaw('intro', $session)->getAlert());
     }
+
+    public function testNotInfiniteAfterRepeated()
+    {
+        $session = self::getTestSession();
+
+        self::executeInSession('exit', $session);
+        self::executeInSession('intro', $session);
+        self::executeInSession('exit', $session);
+        self::executeInSession('intro', $session);
+
+        self::assertNotContains(
+            'Trying to improve your score?',
+            self::executeInSessionRaw('intro', $session)->summary());
+    }
 }

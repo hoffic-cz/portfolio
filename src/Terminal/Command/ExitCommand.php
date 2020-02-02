@@ -10,10 +10,12 @@ use App\Terminal\History;
 
 class ExitCommand implements Command
 {
+    public const EXIT_TIME_KEY = 'exit_time';
+    public const HAS_REOPENED = 'exit_reopened';
 
     function execute(array $params, ?History $history = null): CommandOutput
     {
-        $history->setNote('exit_time', microtime(true));
+        $history->setNote(self::EXIT_TIME_KEY, microtime(true));
 
         return new CommandOutput();
     }
