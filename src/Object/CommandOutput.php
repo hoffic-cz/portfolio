@@ -79,4 +79,22 @@ class CommandOutput
     {
         $this->trigger = $trigger;
     }
+
+    /**
+     * @return string
+     */
+    public function summary(): string
+    {
+        return sprintf(
+            'stdout: %s, alert: %s, trigger: %s',
+            $this->stdout,
+            $this->alert,
+            $this->trigger
+        );
+    }
+
+    public function __toString()
+    {
+        return $this->summary();
+    }
 }

@@ -78,4 +78,24 @@ class CommandOutputTest extends BaseTest
         $output->setTrigger('Hello Clem!');
         self::assertEquals('Hello Clem!', $output->getTrigger());
     }
+
+    public function testSummaryContainsStdout()
+    {
+        $output = new CommandOutput('Hi Clem!');
+        self::assertContains('Hi Clem!', $output->summary());
+    }
+
+    public function testSummaryContainsAlert()
+    {
+        $output = new CommandOutput();
+        $output->setAlert('Hi Clem!');
+        self::assertContains('Hi Clem!', $output->summary());
+    }
+
+    public function testSummaryContainsTrigger()
+    {
+        $output = new CommandOutput();
+        $output->setTrigger('clem_salut');
+        self::assertContains('clem_salut', $output->summary());
+    }
 }
