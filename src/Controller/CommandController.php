@@ -37,6 +37,8 @@ class CommandController extends AbstractController
      */
     public function __invoke(Request $request, Terminal $terminal)
     {
+        $terminal->setSession($this->session);
+
         try {
             $content = $request->getContent();
             $payload = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
@@ -45,9 +47,7 @@ class CommandController extends AbstractController
                 throw new \InvalidArgumentException();
             }
 
-            $uid = $this->generateUserId();
-
-            $output = $terminal->command($payload->command, $uid);
+            $output = $terminal->command($payload->command);
 
             $this->session->save();
 
@@ -58,20 +58,6 @@ class CommandController extends AbstractController
             ]);
         } catch (Exception $e) {
             return new JsonResponse([], Response::HTTP_BAD_REQUEST);
-        }
-    }
-
-    /**
-     * @return string
-     */
-    private function generateUserId(): string
-    {
-        if ($this->session->has('uid')) {
-            return $this->session->get('uid');
-        } else {
-            $uid = uniqid('user_');
-            $this->session->set('uid', $uid);
-            return $uid;
         }
     }
 }

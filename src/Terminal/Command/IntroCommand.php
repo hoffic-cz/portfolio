@@ -12,7 +12,18 @@ class IntroCommand implements Command
 {
     public function execute(array $params, ?History $history = null): CommandOutput
     {
-        return new CommandOutput(<<<STDOUT
+        if (!is_null($history) && $history->hasNote('exit_time')) {
+            $amount = microtime(true) - $history->getNote('exit_time');
+            $history->unsetNote('exit_time');
+
+            $output = new CommandOutput();
+            $output->setAlert(sprintf(
+                'Well done! It took you %.2f seconds to reopen the terminal!',
+                $amount));
+
+            return $output;
+        } else {
+            return new CommandOutput(<<<STDOUT
 
 
         I'm a software engineer based in London/Prague specializing in building
@@ -26,6 +37,7 @@ class IntroCommand implements Command
 
 
 STDOUT
-        );
+            );
+        }
     }
 }

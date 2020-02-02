@@ -11,6 +11,7 @@ use App\Terminal\Command\CdCommand;
 use App\Terminal\Command\ClearCommand;
 use App\Terminal\Command\Command;
 use App\Terminal\Command\ContactCommand;
+use App\Terminal\Command\ExitCommand;
 use App\Terminal\Command\IntroCommand;
 use App\Terminal\Command\LsCommand;
 use App\Terminal\Command\NotFoundCommand;
@@ -18,7 +19,9 @@ use App\Terminal\Command\PwdCommand;
 use App\Terminal\Command\RmCommand;
 use App\Terminal\Command\TailCommand;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 class Terminal
 {
@@ -34,6 +37,7 @@ class Terminal
         'ls' => [LsCommand::class, true],
         'help' => [null, true],
         'man' => [null, true],
+        'exit' => [ExitCommand::class, true],
         'egg' => [null, false],
     ];
 
@@ -50,30 +54,27 @@ class Terminal
     /**
      * Terminal constructor.
      * @param ContainerInterface $container
-     * @param SessionInterface $session
      */
-    public function __construct(ContainerInterface $container, SessionInterface $session)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        $this->session = $session;
     }
 
     /**
      * @param string $command
-     * @param string|null $uid
      * @return CommandOutput
      */
-    public function command(string $command, ?string $uid = null): CommandOutput
+    public function command(string $command): CommandOutput
     {
         $parts = explode(' ', $command);
         $this->removeSudo($parts);
         $name = $parts[0];
 
-        if (is_null($uid)) {
-            $history = null;
-        } else {
-            $history = History::load($this->session, $uid);
+        if (is_null($this->session)) {
+            $this->setSession(null); // Generate a mock session
         }
+        $history = History::load($this->session);
+        $history->log($name);
 
         return $this->executeImplementation($name, $parts, $history);
     }
@@ -96,6 +97,18 @@ class Terminal
             $implementation = $this->container->get(NotFoundCommand::class);
         }
 
-        return $implementation->execute($parts);
+        return $implementation->execute($parts, $history);
+    }
+
+    /**
+     * @param SessionInterface $session
+     */
+    public function setSession(SessionInterface $session = null): void
+    {
+        if (is_null($session)) {
+            $session = new Session(new MockArraySessionStorage());
+        }
+
+        $this->session = $session;
     }
 }

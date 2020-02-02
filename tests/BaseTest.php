@@ -8,6 +8,9 @@ namespace App\Tests;
 use App\Object\CommandOutput;
 use App\Terminal\Terminal;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 abstract class BaseTest extends KernelTestCase
 {
@@ -38,14 +41,43 @@ abstract class BaseTest extends KernelTestCase
 
     /**
      * @param string $command
-     * @param string $uid
-     * @return string
+     * @param SessionInterface $session
+     * @return CommandOutput
      */
-    protected static function executeInSession(string $command, string $uid): string
+    protected static function executeInSessionRaw(
+        string $command,
+        SessionInterface $session
+    ): CommandOutput
     {
         /** @var Terminal $terminal */
         $terminal = self::getService(Terminal::class);
+        $terminal->setSession($session);
 
-        return $terminal->command($command, $uid)->getStdout();
+        return $terminal->command($command);
+    }
+
+    /**
+     * @param string $command
+     * @param SessionInterface $session
+     * @return string
+     */
+    protected static function executeInSession(
+        string $command,
+        SessionInterface $session
+    ): ?string
+    {
+        return self::executeInSessionRaw($command, $session)->getStdout();
+    }
+
+    /**
+     * @return SessionInterface
+     */
+    protected static function getTestSession(): SessionInterface
+    {
+        $session = new Session(new MockArraySessionStorage());
+
+        $session->start();
+
+        return $session;
     }
 }

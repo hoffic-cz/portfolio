@@ -10,5 +10,5 @@ use App\Terminal\History;
 
 interface Command
 {
-    function execute(array $params, ?History $history): CommandOutput;
+    function execute(array $params, ?History $history = null): CommandOutput;
 }

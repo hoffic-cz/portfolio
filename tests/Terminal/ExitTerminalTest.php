@@ -11,43 +11,54 @@ class ExitTerminalTest extends BaseTest
 {
     public function testNoCongratsByDefault()
     {
-        self::assertNotContains('Well done! It took you', self::executeInSession('intro', 'blah'));
+        self::assertNotContains('Well done! It took you', self::executeIndependentCommand('intro'));
     }
 
     public function testCongratsAfterExitingAndReloading()
     {
-        $userId = 'Clément';
+        $session = self::getTestSession();
 
-        self::executeInSession('exit', $userId);
+        self::executeInSession('exit', $session);
 
-        self::assertContains('Well done! It took you', self::executeInSession('intro', $userId));
+        self::assertContains(
+            'Well done! It took you',
+            self::executeInSessionRaw('intro', $session)->getAlert());
     }
 
     public function testIgnoreDifferentUsers()
     {
-        self::executeInSession('exit', 'Clément');
+        $sessionA = self::getTestSession();
+        $sessionB = self::getTestSession();
 
-        self::assertNotContains('Well done!', self::executeInSession('intro', 'Not Clément'));
+        self::executeInSession('exit', $sessionA);
+
+        self::assertNotContains(
+            'Well done!',
+            self::executeInSessionRaw('intro', $sessionB)->summary());
     }
 
     public function testResetAfterShowing()
     {
-        $userId = 'Clément';
+        $session = self::getTestSession();
 
-        self::executeInSession('exit', $userId);
-        self::executeInSession('intro', $userId);
+        self::executeInSession('exit', $session);
+        self::executeInSession('intro', $session);
 
-        self::assertNotContains('Well done! It took you', self::executeInSession('intro', $userId));
+        self::assertNotContains(
+            'Well done! It took you',
+            self::executeInSessionRaw('intro', $session)->summary());
     }
 
     public function testRepeatedInvocation()
     {
-        $userId = 'Clément';
+        $session = self::getTestSession();
 
-        self::executeInSession('exit', $userId);
-        self::executeInSession('intro', $userId);
-        self::executeInSession('exit', $userId);
+        self::executeInSession('exit', $session);
+        self::executeInSession('intro', $session);
+        self::executeInSession('exit', $session);
 
-        self::assertContains('Trying to improve your score?', self::executeInSession('intro', $userId));
+        self::assertContains(
+            'Trying to improve your score?',
+            self::executeInSessionRaw('intro', $session)->getAlert());
     }
 }
