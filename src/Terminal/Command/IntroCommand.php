@@ -6,10 +6,11 @@ namespace App\Terminal\Command;
 
 
 use App\Object\CommandOutput;
+use App\Terminal\History;
 
 class IntroCommand implements Command
 {
-    public function execute(array $params): CommandOutput
+    public function execute(array $params, ?History $history = null): CommandOutput
     {
         return new CommandOutput(<<<STDOUT
 

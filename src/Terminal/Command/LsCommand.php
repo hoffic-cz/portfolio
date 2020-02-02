@@ -6,6 +6,7 @@ namespace App\Terminal\Command;
 
 
 use App\Object\CommandOutput;
+use App\Terminal\History;
 use App\Terminal\Terminal;
 
 class LsCommand implements Command
@@ -22,7 +23,7 @@ class LsCommand implements Command
         $this->cdCommand = $cdCommand;
     }
 
-    function execute(array $params): CommandOutput
+    function execute(array $params, ?History $history = null): CommandOutput
     {
         if (count($params) <= 1) {
             $output = $this->listCommands();

@@ -11,10 +11,24 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class CommandController extends AbstractController
 {
+    /** @var SessionInterface */
+    private $session;
+
+    /**
+     * CommandController constructor.
+     * @param SessionInterface $session
+     */
+    public function __construct(SessionInterface $session)
+    {
+        $this->session = $session;
+        $this->session->start();
+    }
+
     /**
      * @Route(path="/command/")
      * @param Request $request
@@ -31,7 +45,11 @@ class CommandController extends AbstractController
                 throw new \InvalidArgumentException();
             }
 
-            $output = $terminal->command($payload->command);
+            $uid = $this->generateUserId();
+
+            $output = $terminal->command($payload->command, $uid);
+
+            $this->session->save();
 
             return new JsonResponse([
                 'stdout' => $output->getStdout(),
@@ -40,6 +58,20 @@ class CommandController extends AbstractController
             ]);
         } catch (Exception $e) {
             return new JsonResponse([], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    /**
+     * @return string
+     */
+    private function generateUserId(): string
+    {
+        if ($this->session->has('uid')) {
+            return $this->session->get('uid');
+        } else {
+            $uid = uniqid('user_');
+            $this->session->set('uid', $uid);
+            return $uid;
         }
     }
 }

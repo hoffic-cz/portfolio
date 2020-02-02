@@ -6,11 +6,12 @@ namespace App\Terminal\Command;
 
 
 use App\Object\CommandOutput;
+use App\Terminal\History;
 
 class CdCommand implements Command
 {
 
-    function execute(array $params): CommandOutput
+    function execute(array $params, ?History $history = null): CommandOutput
     {
         $target = '/home/visitor';
 
