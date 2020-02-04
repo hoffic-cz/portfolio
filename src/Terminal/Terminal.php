@@ -15,10 +15,13 @@ use App\Terminal\Command\ExitCommand;
 use App\Terminal\Command\HelpCommand;
 use App\Terminal\Command\IntroCommand;
 use App\Terminal\Command\LsCommand;
+use App\Terminal\Command\ManCommand;
+use App\Terminal\Command\Manual;
 use App\Terminal\Command\NotFoundCommand;
 use App\Terminal\Command\PwdCommand;
 use App\Terminal\Command\RmCommand;
 use App\Terminal\Command\TailCommand;
+use App\Util\CmdImplProvider;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -37,7 +40,7 @@ class Terminal
         'contact' => [ContactCommand::class, true],
         'ls' => [LsCommand::class, true],
         'help' => [HelpCommand::class, true],
-        'man' => [null, true],
+        'man' => [ManCommand::class, true],
         'exit' => [ExitCommand::class, true],
         'egg' => [null, false],
     ];
@@ -46,19 +49,19 @@ class Terminal
         'secrets'
     ];
 
-    /** @var ContainerInterface */
-    private $container;
+    /** @var CmdImplProvider */
+    private $cmdImplProvider;
 
     /** @var SessionInterface */
     private $session;
 
     /**
      * Terminal constructor.
-     * @param ContainerInterface $container
+     * @param CmdImplProvider $cmdImplProvider
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(CmdImplProvider $cmdImplProvider)
     {
-        $this->container = $container;
+        $this->cmdImplProvider = $cmdImplProvider;
     }
 
     /**
@@ -77,7 +80,7 @@ class Terminal
         $history = History::load($this->session);
         $history->log($name);
 
-        return $this->executeImplementation($name, $parts, $history);
+        return $this->execute($name, $parts, $history);
     }
 
     private function removeSudo(array &$parts)
@@ -87,18 +90,15 @@ class Terminal
         }
     }
 
-    private function executeImplementation(string $name, array $parts, ?History $history): CommandOutput
+    private function execute(string $name, array $parts, ?History $history): CommandOutput
     {
-        /** @var Command $implementation */
-        if (isset(self::COMMANDS[$name])) {
-            $implementation = $this->container->get(self::COMMANDS[$name][0]);
-        } elseif (in_array($name, self::DIRECTORIES)) {
+        if (in_array($name, self::DIRECTORIES)) {
             return new CommandOutput(sprintf('bash: %s: Is a directory', $name));
         } else {
-            $implementation = $this->container->get(NotFoundCommand::class);
-        }
+            $implementation = $this->cmdImplProvider->get($name);
 
-        return $implementation->execute($parts, $history);
+            return $implementation->execute($parts, $history);
+        }
     }
 
     /**

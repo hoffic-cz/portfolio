@@ -9,7 +9,7 @@ use App\Object\CommandOutput;
 use App\Terminal\History;
 use App\Terminal\Terminal;
 
-class LsCommand implements Command
+class LsCommand implements Command, Manual
 {
     /** @var CdCommand */
     private $cdCommand;
@@ -63,5 +63,10 @@ class LsCommand implements Command
             $date,
             $command
         );
+    }
+
+    function manual(array $params, ?History $history = null): CommandOutput
+    {
+        // TODO: Implement manual() method.
     }
 }

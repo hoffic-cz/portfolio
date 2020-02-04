@@ -40,4 +40,23 @@ class ManTest extends BaseTest
             '',
             true);
     }
+
+    public function testManNerd()
+    {
+        $session = self::getTestSession();
+
+        self::executeInSession('something', $session);
+        self::executeInSession('man something', $session);
+        self::executeInSession('something-else', $session);
+        self::executeInSession('man something-else', $session);
+
+        self::assertContains(
+            'bookworm',
+            self::executeInSessionRaw('man whatever', $session)->getAlert());
+    }
+
+    public function testEmptyProgram()
+    {
+        self::assertContains('man <command>', self::executeIndependentCommand('man'));
+    }
 }
