@@ -12,6 +12,7 @@ use App\Terminal\Command\ClearCommand;
 use App\Terminal\Command\Command;
 use App\Terminal\Command\ContactCommand;
 use App\Terminal\Command\ExitCommand;
+use App\Terminal\Command\HelpCommand;
 use App\Terminal\Command\IntroCommand;
 use App\Terminal\Command\LsCommand;
 use App\Terminal\Command\NotFoundCommand;
@@ -35,7 +36,7 @@ class Terminal
         'rm' => [RmCommand::class, true],
         'contact' => [ContactCommand::class, true],
         'ls' => [LsCommand::class, true],
-        'help' => [null, true],
+        'help' => [HelpCommand::class, true],
         'man' => [null, true],
         'exit' => [ExitCommand::class, true],
         'egg' => [null, false],
