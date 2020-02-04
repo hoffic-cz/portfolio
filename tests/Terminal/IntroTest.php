@@ -40,6 +40,6 @@ class IntroTest extends BaseTest
 
     public function testContainsHints2()
     {
-        $this->assertContains("'help <command>'", self::executeIndependentCommand('intro'));
+        $this->assertContains("'help'", self::executeIndependentCommand('intro'));
     }
 }

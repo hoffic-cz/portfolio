@@ -42,7 +42,7 @@ class IntroCommand implements Command
         a neural network for best engineering practices.
 
 
-        You might want to try 'ls' or 'help <command>' to get started.
+        You might want to try 'ls' or 'help' to get started.
 
 
 STDOUT
