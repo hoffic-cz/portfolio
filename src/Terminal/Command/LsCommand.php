@@ -67,6 +67,20 @@ class LsCommand implements Command, Manual
 
     function manual(array $params, ?History $history = null): CommandOutput
     {
-        // TODO: Implement manual() method.
+        return new CommandOutput(<<<'STDOUT'
+LS(1)
+
+NAME
+    ls - list directory contents
+
+DESCRIPTION
+    Lists information about the FILEs in current directory.
+
+    -a  |  do not ignore hidden files
+
+AUTHOR
+    Petr Hoffmann
+STDOUT
+);
     }
 }

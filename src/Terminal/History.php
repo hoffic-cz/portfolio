@@ -118,4 +118,12 @@ class History
 
         $this->session->set(self::SESSION_KEY, $package);
     }
+
+    /**
+     * @return array
+     */
+    public function getCommands(): array
+    {
+        return $this->commands;
+    }
 }

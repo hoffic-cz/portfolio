@@ -52,7 +52,26 @@ class ManTest extends BaseTest
 
         self::assertContains(
             'bookworm',
-            self::executeInSessionRaw('man whatever', $session)->getAlert());
+            self::executeInSessionRaw('man whatever', $session)->getAlert(),
+            '',
+            true);
+    }
+
+    public function testManNerdJustOnce()
+    {
+        $session = self::getTestSession();
+
+        self::executeInSession('something', $session);
+        self::executeInSession('man something', $session);
+        self::executeInSession('something-else', $session);
+        self::executeInSession('man something-else', $session);
+        self::executeInSession('man whatever', $session);
+
+        self::assertNotContains(
+            'bookworm',
+            self::executeInSessionRaw('man whatever', $session)->summary(),
+            '',
+            true);
     }
 
     public function testEmptyProgram()

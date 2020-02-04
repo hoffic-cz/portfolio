@@ -9,8 +9,10 @@ use App\Object\CommandOutput;
 use App\Terminal\History;
 use App\Util\CmdImplProvider;
 
-class ManCommand implements Command, Usage
+class ManCommand implements Command, Manual, Usage
 {
+    private const BOOKWORM_THRESHOLD = 3;
+
     /** @var CmdImplProvider */
     private $cmdImplProvider;
 
@@ -25,7 +27,11 @@ class ManCommand implements Command, Usage
 
     function execute(array $params, ?History $history = null): CommandOutput
     {
-        if (empty($params)) {
+        array_shift($params); // Discard 'man'
+
+        if ($this->triggerBookworm($history)) {
+            return $this->bookwormEgg();
+        } elseif (empty($params)) {
             return $this->usage();
         } else {
             $name = array_shift($params);
@@ -39,9 +45,39 @@ class ManCommand implements Command, Usage
         }
     }
 
+    private function triggerBookworm(?History $history)
+    {
+        if (!is_null($history) && !$history->hasNote('bookworm')) {
+            $count = 0;
+            foreach ($history->getCommands() as $command) {
+                if ($command === 'man') {
+                    $count++;
+                }
+            }
+            if ($count >= self::BOOKWORM_THRESHOLD) {
+                $history->setNote('bookworm', true);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function bookwormEgg(): CommandOutput
+    {
+        $output = new CommandOutput();
+
+        $output->setAlert('oH hEY! wE GoT US a BoOKwOrm -:- KEEP UP THE GOOD WORK!');
+
+        return $output;
+    }
+
     function usage(): CommandOutput
     {
-        return new CommandOutput('WIP');
+        return new CommandOutput(/** @lang text */ <<<'STDOUT'
+Usage: 'man <command>'
+STDOUT
+        );
     }
 
     private function specialCases(string $name, Command $implementation, ?History $history): CommandOutput
@@ -54,5 +90,17 @@ class ManCommand implements Command, Usage
         } else {
             return new CommandOutput('No manual entry. This command has no hidden functionality.');
         }
+    }
+
+    function manual(array $params, ?History $history = null): CommandOutput
+    {
+        return new CommandOutput(<<<'STDOUT'
+Hmm... I think you would love the movie Inception.
+
+Who would believe there'd be a manual page for how to use a manual.
+
+The question is, do you know how to exit Vim?
+STDOUT
+        );
     }
 }
