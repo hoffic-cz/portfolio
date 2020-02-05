@@ -5,6 +5,8 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     source_art_image: '../graphics/source_art.png'
+    emails_from: 'noreply@hoffic.dev'
+    emails_to: 'petr@hoffic.dev'
 
 services:
     # default configuration for services in *this* file
@@ -37,3 +39,11 @@ services:
         autowire: false
         arguments:
             - '%kernel.root_dir%/%source_art_image%'
+
+    App\Terminal\Command\SayCommand:
+        class: App\Terminal\Command\SayCommand
+        public: true
+        arguments:
+            - '%emails_from%'
+            - '%emails_to%'
+            - '@Symfony\Component\Mailer\MailerInterface'

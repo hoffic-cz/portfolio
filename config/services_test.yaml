@@ -1,0 +1,6 @@
+services:
+    App\Mock\:
+        resource: '../src/Mock/*'
+        public: true
+
+    Symfony\Component\Mailer\MailerInterface: '@App\Mock\MockMailer'

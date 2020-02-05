@@ -129,6 +129,12 @@
     "psr/log": {
         "version": "1.1.2"
     },
+    "sendgrid/php-http-client": {
+        "version": "3.10.2"
+    },
+    "sendgrid/sendgrid": {
+        "version": "7.4.2"
+    },
     "sensio/framework-extra-bundle": {
         "version": "5.2",
         "recipe": {
@@ -403,6 +409,15 @@
     },
     "symfony/security-http": {
         "version": "v4.4.2"
+    },
+    "symfony/sendgrid-mailer": {
+        "version": "4.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.4",
+            "ref": "b46e4f8f1adb2864f0aa9c0ff57aea3324a07199"
+        }
     },
     "symfony/serializer": {
         "version": "v4.4.2"

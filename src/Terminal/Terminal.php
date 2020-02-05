@@ -9,20 +9,17 @@ use App\Object\CommandOutput;
 use App\Terminal\Command\CatCommand;
 use App\Terminal\Command\CdCommand;
 use App\Terminal\Command\ClearCommand;
-use App\Terminal\Command\Command;
 use App\Terminal\Command\ContactCommand;
 use App\Terminal\Command\ExitCommand;
 use App\Terminal\Command\HelpCommand;
 use App\Terminal\Command\IntroCommand;
 use App\Terminal\Command\LsCommand;
 use App\Terminal\Command\ManCommand;
-use App\Terminal\Command\Manual;
-use App\Terminal\Command\NotFoundCommand;
 use App\Terminal\Command\PwdCommand;
 use App\Terminal\Command\RmCommand;
+use App\Terminal\Command\SayCommand;
 use App\Terminal\Command\TailCommand;
 use App\Util\CmdImplProvider;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
@@ -38,6 +35,7 @@ class Terminal
         'cd' => [CdCommand::class, true],
         'rm' => [RmCommand::class, true],
         'contact' => [ContactCommand::class, true],
+        'say' => [SayCommand::class, true],
         'ls' => [LsCommand::class, true],
         'help' => [HelpCommand::class, true],
         'man' => [ManCommand::class, true],
