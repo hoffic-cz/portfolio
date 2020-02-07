@@ -29,14 +29,23 @@ abstract class BaseTest extends KernelTestCase
 
     /**
      * @param string $command
-     * @return string
+     * @return CommandOutput
      */
-    protected static function executeIndependentCommand(string $command): string
+    protected static function executeIndependentCommandRaw(string $command): CommandOutput
     {
         /** @var Terminal $terminal */
         $terminal = self::getService(Terminal::class);
 
-        return $terminal->command($command)->getStdout();
+        return $terminal->command($command);
+    }
+
+    /**
+     * @param string $command
+     * @return string
+     */
+    protected static function executeIndependentCommand(string $command): string
+    {
+        return self::executeIndependentCommandRaw($command)->getStdout();
     }
 
     /**
