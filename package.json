@@ -16,6 +16,7 @@
         "build": "encore production --progress"
     },
     "dependencies": {
+        "ansi-escapes": "^4.3.0",
         "bulma": "^0.8.0",
         "jquery": "^3.4.1",
         "xterm": "^4.3.0",

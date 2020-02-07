@@ -1,8 +1,6 @@
-import $ from "jquery";
 import {setup as mazeSetup} from "./vim";
 import {setState, STATES} from "./states";
-
-const timeout = 2500;
+import {notifyBackEnd, command as backEndCommand} from "./back-end-glue";
 
 export function commandExit(terminal) {
   terminal.widget.hide();
@@ -14,47 +12,33 @@ export function commandExit(terminal) {
 }
 
 export function commandOther(terminal, command, commandCallback) {
-  $.ajax('/command/', {
-    method: 'POST',
-    data: JSON.stringify({
-      command: command
-    }),
-    timeout: timeout,
-    success: function (response) {
-      if (response.stdout != null) {
-        let lines = response.stdout.split("\n");
-        lines.forEach(function (line) {
-          terminal.writeln(line);
-        });
+  backEndCommand(
+      command,
+      function (response) {
+        if (response.stdout != null) {
+          let lines = response.stdout.split("\n");
+          lines.forEach(function (line) {
+            terminal.writeln(line);
+          });
+        }
+        if (response.alert != null) {
+          alert(response.alert);
+        }
+        if (response.trigger != null) {
+          triggerFrontEnd(terminal, response.trigger);
+        }
+        commandCallback();
+      },
+      function (x, t, m) {
+        if (t === "timeout") {
+          terminal.writeln('Timed out!');
+        }
+        commandCallback();
       }
-      if (response.alert != null) {
-        alert(response.alert);
-      }
-      if (response.trigger != null) {
-        triggerFrontEnd(terminal, response.trigger);
-      }
-      commandCallback();
-    },
-    error: function (x, t, m) {
-      if (t === "timeout") {
-        console.log('Timed out!');
-      }
-      commandCallback();
-    }
-  });
+  );
 }
 
-function notifyBackEnd(command) {
-  $.ajax('/command/', {
-    method: 'POST',
-    data: JSON.stringify({
-      command: command
-    }),
-    timeout: timeout,
-  });
-}
-
-function triggerFrontEnd(terminal, trigger, callback) {
+function triggerFrontEnd(terminal, trigger) {
   switch (trigger) {
     case 'rm':
       rmAction(terminal);

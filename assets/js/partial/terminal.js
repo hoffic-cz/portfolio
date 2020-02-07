@@ -4,6 +4,7 @@ import {FitAddon} from "xterm-addon-fit";
 import {commandExit, commandOther} from "./terminal-commands";
 import {getState, setState, STATES} from "./states";
 import {key as mazeKey} from "./vim";
+import ansiEscapes from "ansi-escapes";
 
 const promptText = '\x1b[1;32mvisitor@hoffic.dev\x1b[1;32m\x1b[1;37m:\x1b[1;34m~\x1b[1;0m$ ';
 const promptTextLength = promptText.length
@@ -64,6 +65,7 @@ function configureInput(terminal) {
     if (getState(terminal) === STATES.NORMAL) {
       terminal.write(promptText);
       terminal.write('\x1b[1;0m'); // Reset the colour
+      terminal.write(ansiEscapes.cursorShow); // Reset the cursor
     }
   }
 }
@@ -102,9 +104,20 @@ function keyEnter(terminal, key) {
 
   let input = terminal.inputBuffer;
   terminal.inputBuffer = '';
+
+  input = removeEscapeColon(input);
+
   command(terminal, input, function () {
     terminal.prompt();
   });
+}
+
+function removeEscapeColon(input) {
+  if (input.length > 0 && input[0] === ':') {
+    input = input.substr(1);
+  }
+
+  return input;
 }
 
 /**
