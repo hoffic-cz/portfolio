@@ -126,4 +126,13 @@ class History
     {
         return $this->commands;
     }
+
+    /**
+     * @param string $command
+     * @return bool
+     */
+    public function containsCommand(string $command): bool
+    {
+        return in_array($command, $this->commands);
+    }
 }

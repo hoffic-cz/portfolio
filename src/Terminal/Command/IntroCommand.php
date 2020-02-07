@@ -19,12 +19,16 @@ class IntroCommand implements Command
     {
         if ($history->hasNote(ExitCommand::HAS_REOPENED)
             && $history->hasNote(ExitCommand::EXIT_TIME_KEY)) {
-            return $this->improveScore($history);
+            $output = $this->improveScore($history);
         } elseif ($history->hasNote(ExitCommand::EXIT_TIME_KEY)) {
-            return $this->reopeningTerminal($history);
+            $output = $this->reopeningTerminal($history);
+        } elseif ($history->hasNote(VimCommand::START_TIME_KEY)) {
+            $output = $this->gaveUpMaze($history);
         } else {
-            return $this->classicIntro();
+            $output = $this->classicIntro();
         }
+
+        return $output;
     }
 
     /**
@@ -85,5 +89,14 @@ STDOUT
         $history->setNote(ExitCommand::HAS_REOPENED, true);
 
         return $amount;
+    }
+
+    private function gaveUpMaze(?History $history): CommandOutput
+    {
+        $output = new CommandOutput();
+
+        $output->setAlert('Next time try :q<enter> to exit vim properly :P');
+
+        return $output;
     }
 }

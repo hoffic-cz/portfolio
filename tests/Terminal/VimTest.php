@@ -31,7 +31,7 @@ class VimTest extends BaseTest
 
         self::assertContains(
             'Next time try :q<enter>',
-            self::executeInSessionRaw('intro', $session));
+            self::executeInSessionRaw('intro', $session)->getAlert());
     }
 
     public function testImproveTime()

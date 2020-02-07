@@ -2,6 +2,7 @@ import ansiEscapes from "ansi-escapes";
 import {command, notifyBackEnd} from "./back-end-glue";
 import {getState, setState, STATES} from "./states";
 
+const LOGO_DURATION = 2000;
 const PLAYER_CHAR = '\x1b[1;31m' + '█' + '\x1b[1;0m';
 
 export function key(terminal, key) {
@@ -48,15 +49,19 @@ function move(terminal, key) {
 }
 
 export function setup(terminal) {
-  terminal.maze = {
-    tiles: generateMaze(),
-    x: 80,
-    y: 21,
-    prevX: 5,
-    prevY: 3,
-  };
+  logo(terminal);
 
-  render(terminal);
+  setTimeout(function () {
+    terminal.maze = {
+      tiles: generateMaze(),
+      x: 5,
+      y: 3,
+      prevX: 5,
+      prevY: 3,
+    };
+
+    render(terminal);
+  }, LOGO_DURATION);
 }
 
 function render(terminal, redraw = true) {
@@ -124,4 +129,36 @@ function generateMaze() {
   let maze = plan.split("\n");
 
   return maze.slice(1, -1);
+}
+
+function logo(terminal) {
+  let logo = `
+
+
+                                            .                    
+                            ##############..... ##############   
+                            ##############......##############   
+                              ##########..........##########     
+                              ##########........##########       
+                              ##########.......##########        
+                              ##########.....##########..        
+                              ##########....##########.....      
+                            ..##########..##########.........    
+                          ....##########.#########.............  
+                            ..################JJJ............    
+                              ################.............      
+                              ##############.JJJ.JJJJJJJJJJ      
+                              ############...JJ...JJ..JJ  JJ     
+                              ##########....JJ...JJ..JJ  JJ      
+                              ########......JJJ..JJJ JJJ JJJ     
+                              ######    .........                
+                                          .....                  
+                                            .                    
+  `;
+
+  let lines = logo.split("\n");
+
+  for (let i = 0; i < lines.length; i++) {
+    terminal.writeln(lines[i]);
+  }
 }
