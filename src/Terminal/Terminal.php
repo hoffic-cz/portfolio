@@ -45,6 +45,10 @@ class Terminal
         'egg' => [null, false],
     ];
 
+    public const TRIGGERS = [
+        'vim' => VimCommand::class,
+    ];
+
     public const DIRECTORIES = [
         'secrets'
     ];
@@ -78,9 +82,14 @@ class Terminal
             $this->setSession(null); // Generate a mock session
         }
         $history = History::load($this->session);
-        $history->log($name);
 
-        return $this->execute($name, $parts, $history);
+        if ($name === ':') {
+            $history->log($command);
+            return $this->trigger($parts, $history);
+        } else {
+            $history->log($name);
+            return $this->execute($name, $parts, $history);
+        }
     }
 
     private function removeSudo(array &$parts)
@@ -99,6 +108,14 @@ class Terminal
 
             return $implementation->execute($parts, $history);
         }
+    }
+
+    private function trigger(array $parts, ?History $history): CommandOutput
+    {
+        array_shift($parts); // Discarding the escape colon
+        $trigger = array_shift($parts);
+        $implementation = $this->cmdImplProvider->getTrigger($trigger);
+        return $implementation->trigger($parts, $history);
     }
 
     /**

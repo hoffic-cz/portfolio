@@ -37,7 +37,7 @@ function move(terminal, key) {
   }
 
   if (isExit(terminal, x, y)) {
-    command(':vim:exit', function (response) {
+    command(': vim exit', function (response) {
       alert(response.alert);
     });
     setState(terminal, STATES.NORMAL);
