@@ -19,6 +19,7 @@ use App\Terminal\Command\PwdCommand;
 use App\Terminal\Command\RmCommand;
 use App\Terminal\Command\SayCommand;
 use App\Terminal\Command\TailCommand;
+use App\Terminal\Command\VimCommand;
 use App\Util\CmdImplProvider;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -36,6 +37,7 @@ class Terminal
         'rm' => [RmCommand::class, true],
         'contact' => [ContactCommand::class, true],
         'say' => [SayCommand::class, true],
+        'vi' => [VimCommand::class, true],
         'ls' => [LsCommand::class, true],
         'help' => [HelpCommand::class, true],
         'man' => [ManCommand::class, true],

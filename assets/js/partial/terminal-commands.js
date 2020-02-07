@@ -1,4 +1,6 @@
 import $ from "jquery";
+import {setup as mazeSetup} from "./vim";
+import {setState, STATES} from "./states";
 
 const timeout = 2500;
 
@@ -52,10 +54,14 @@ function notifyBackEnd(command) {
   });
 }
 
-function triggerFrontEnd(terminal, trigger) {
+function triggerFrontEnd(terminal, trigger, callback) {
   switch (trigger) {
     case 'rm':
       rmAction(terminal);
+      break;
+    case 'maze':
+      setState(terminal, STATES.MAZE);
+      mazeSetup(terminal);
       break;
   }
 }

@@ -2,6 +2,8 @@ import $ from "jquery";
 import {Terminal} from "xterm";
 import {FitAddon} from "xterm-addon-fit";
 import {commandExit, commandOther} from "./terminal-commands";
+import {getState, setState, STATES} from "./states";
+import {key as mazeKey} from "./vim";
 
 const promptText = '\x1b[1;32mvisitor@hoffic.dev\x1b[1;32m\x1b[1;37m:\x1b[1;34m~\x1b[1;0m$ ';
 const promptTextLength = promptText.length
@@ -26,6 +28,7 @@ export function setUpTerminal(terminalElement) {
 
   terminal.widget = $(terminalElement).closest('.terminal-widget');
 
+  setState(terminal, STATES.NORMAL);
   configureInput(terminal);
   configureButtons(terminal);
 
@@ -40,22 +43,28 @@ function configureInput(terminal) {
   terminal.inputBuffer = '';
 
   terminal.onKey(function (event) {
-    switch (event.key.charCodeAt(0)) {
-      case 13:
-        keyEnter(terminal, event.key);
-        break;
-      case 127:
-        keyBackspace(terminal, event.key);
-        break;
-      default:
-        keyOther(terminal, event.key);
-        break;
+    if (getState(terminal) === STATES.NORMAL) {
+      switch (event.key.charCodeAt(0)) {
+        case 13:
+          keyEnter(terminal, event.key);
+          break;
+        case 127:
+          keyBackspace(terminal, event.key);
+          break;
+        default:
+          keyOther(terminal, event.key);
+          break;
+      }
+    } else if (getState(terminal) === STATES.MAZE) {
+      mazeKey(terminal, event.key);
     }
   });
 
   terminal.prompt = function () {
-    terminal.write(promptText);
-    terminal.write('\x1b[1;0m'); // Reset the colour
+    if (getState(terminal) === STATES.NORMAL) {
+      terminal.write(promptText);
+      terminal.write('\x1b[1;0m'); // Reset the colour
+    }
   }
 }
 
