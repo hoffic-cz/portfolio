@@ -20,7 +20,7 @@ class HelpCommand implements Command
     - getting to know me a bit from my online presence
     - exploring the secret corners and easter eggs scattered around here
     - realizing you have just found who you were looking for
-      (talking to you <inser a big tech company name here>)
+      (talking to you <insert a big tech company name here>)
 
 
     Exploit this to the maximum, but make sure you report all issues
