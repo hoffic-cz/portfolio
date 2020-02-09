@@ -178,4 +178,8 @@ function configureButtons(terminal) {
   terminal.widget.find('.item.contact').first().click(function () {
     typeAndExecuteCommand(terminal, 'contact');
   });
+
+  terminal.widget.find('.item.about').first().click(function () {
+    typeAndExecuteCommand(terminal, 'about');
+  });
 }

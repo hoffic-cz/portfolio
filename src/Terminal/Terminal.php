@@ -6,6 +6,7 @@ namespace App\Terminal;
 
 
 use App\Object\CommandOutput;
+use App\Terminal\Command\AboutCommand;
 use App\Terminal\Command\CatCommand;
 use App\Terminal\Command\CdCommand;
 use App\Terminal\Command\ClearCommand;
@@ -29,6 +30,7 @@ class Terminal
 {
     public const COMMANDS = [
         'intro' => [IntroCommand::class, true],
+        'about' => [AboutCommand::class, true],
         'clear' => [ClearCommand::class, true],
         'cat' => [CatCommand::class, true],
         'tail' => [TailCommand::class, true],
