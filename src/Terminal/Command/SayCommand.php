@@ -40,11 +40,11 @@ class SayCommand implements Command
         $email->from($this->emailsFrom);
         $email->to($this->emailsTo);
 
-        $email->subject('Test :P');
+        $email->subject('Message from Hoffic.dev');
         $email->text(implode(' ', $params));
 
         $this->mailer->send($email);
 
-        return new CommandOutput('Sent');
+        return new CommandOutput('Thank you for your message, it has been received :)');
     }
 }

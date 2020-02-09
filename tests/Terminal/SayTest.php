@@ -22,4 +22,20 @@ class SayTest extends BaseTest
 
         self::assertContains('Salut Clément!', $mailer->getContents());
     }
+
+    public function testThankForMessage()
+    {
+        self::assertContains(
+            'Thank you',
+            self::executeIndependentCommand('say Salut Clément!'));
+    }
+
+    public function testConfirmReceived()
+    {
+        self::assertContains(
+            'Received',
+            self::executeIndependentCommand('say Salut Clément!'),
+            '',
+            true);
+    }
 }
