@@ -20,6 +20,7 @@ use App\Terminal\Command\PwdCommand;
 use App\Terminal\Command\RmCommand;
 use App\Terminal\Command\SayCommand;
 use App\Terminal\Command\TailCommand;
+use App\Terminal\Command\TimelineCommand;
 use App\Terminal\Command\VimCommand;
 use App\Util\CmdImplProvider;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -31,6 +32,7 @@ class Terminal
     public const COMMANDS = [
         'intro' => [IntroCommand::class, true],
         'about' => [AboutCommand::class, true],
+        'timeline' => [TimelineCommand::class, true],
         'clear' => [ClearCommand::class, true],
         'cat' => [CatCommand::class, true],
         'tail' => [TailCommand::class, true],

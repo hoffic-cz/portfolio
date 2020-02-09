@@ -7,6 +7,11 @@ parameters:
     source_art_image: '../graphics/source_art.png'
     emails_from: 'noreply@hoffic.dev'
     emails_to: 'petr@hoffic.dev'
+    timeline:
+        'Swansea University': 'September 2017 - now'
+        'Fixture Travel': 'March 2018 - now'
+        'Volleyball Team Captain': 'June 2019 - now'
+        'Volleyball Club Treasurer': 'June 2018 - May 2019'
 
 services:
     # default configuration for services in *this* file
@@ -47,3 +52,9 @@ services:
             - '%emails_from%'
             - '%emails_to%'
             - '@Symfony\Component\Mailer\MailerInterface'
+
+    App\Terminal\Command\TimelineCommand:
+        class: App\Terminal\Command\TimelineCommand
+        public: true
+        arguments:
+            - '%timeline%'

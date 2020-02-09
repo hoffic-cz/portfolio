@@ -182,4 +182,8 @@ function configureButtons(terminal) {
   terminal.widget.find('.item.about').first().click(function () {
     typeAndExecuteCommand(terminal, 'about');
   });
+
+  terminal.widget.find('.item.timeline').first().click(function () {
+    typeAndExecuteCommand(terminal, 'timeline');
+  });
 }
