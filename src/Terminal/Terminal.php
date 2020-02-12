@@ -11,6 +11,7 @@ use App\Terminal\Command\CatCommand;
 use App\Terminal\Command\CdCommand;
 use App\Terminal\Command\ClearCommand;
 use App\Terminal\Command\ContactCommand;
+use App\Terminal\Command\DogCommand;
 use App\Terminal\Command\ExitCommand;
 use App\Terminal\Command\HelpCommand;
 use App\Terminal\Command\IntroCommand;
@@ -35,6 +36,7 @@ class Terminal
         'timeline' => [TimelineCommand::class, true],
         'clear' => [ClearCommand::class, true],
         'cat' => [CatCommand::class, true],
+        'dog' => [DogCommand::class, false],
         'tail' => [TailCommand::class, true],
         'pwd' => [PwdCommand::class, true],
         'cd' => [CdCommand::class, true],
