@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div>
+        <div class="error">
+            <div class="title">{{ status_code }} - {{ status_text }}</div>
+            <div class="message">
+                {% block message %}
+                    Oops! That's an error!
+                {% endblock %}
+            </div>
+            <div class="help">
+                Please help us identify the culprit, who do you think caused it?
+            </div>
+        </div>
+        <div class="choices">
+            <button onclick="alert('We knew it! It\'s always the manager\'s fault!');">Petr 1</button>
+            <button onclick="alert('Hang on, who\'s that guy and what\'s he doing here?!');">Petr 2</button>
+            <button onclick="alert('Makes sense! It\'s ops team\'s fault!');">Petr 3</button>
+            <button onclick="alert('Good spot! It must\'ve been someone with a computer!');">Petr 4</button>
+        </div>
+        <div class="team"></div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        body {
+            background: rgb(70, 14, 0);
+            background: linear-gradient(180deg, rgb(252, 255, 0) 0%, rgb(151, 0, 14) 100%);
+
+            width: 100vw;
+            height: 100vh;
+
+            padding: 0;
+            margin: 0;
+            border: none;
+        }
+
+        .title {
+            font-size: 4em;
+            font-weight: bold;
+        }
+
+        .message {
+            font-size: 2em;
+        }
+
+        .error {
+            height: 30vh;
+            text-align: center;
+        }
+
+        .help {
+            margin-top: 1em;
+            font-size: 1.5em;
+        }
+
+        .choices {
+            width: 50rem;
+            height: 10vh;
+            margin: 0 auto;
+        }
+
+        .choices button {
+            width: 5rem;
+            margin: 0 3.5rem;
+            padding: 0;
+
+            border: none;
+
+            font-size: 1.5rem;
+            font-weight: bold;
+
+            background-color: #97001c;
+            color: #ffffff;
+
+            cursor: pointer;
+        }
+        .choices button:hover {
+            background-color: #f90023;
+        }
+
+        .team {
+            height: 60vh;
+            margin: 0 auto;
+
+            background-image: url("/static/team.png");
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+    </style>
+{% endblock %}
