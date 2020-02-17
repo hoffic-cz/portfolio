@@ -12,6 +12,11 @@ export function commandExit(terminal) {
   }, 2000);
 }
 
+export function terminalCrack(terminal) {
+  terminal.widget.addClass('cracked');
+  notifyBackEnd(': crack');
+}
+
 export function commandOther(terminal, command, commandCallback) {
   backEndCommand(
       command,

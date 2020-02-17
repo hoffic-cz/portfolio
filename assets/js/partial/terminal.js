@@ -1,7 +1,7 @@
 import $ from "jquery";
 import {Terminal} from "xterm";
 import {FitAddon} from "xterm-addon-fit";
-import {commandExit, commandOther} from "./terminal-commands";
+import {commandExit, commandOther, terminalCrack} from "./terminal-commands";
 import {getState, setState, STATES} from "./states";
 import {key as mazeKey} from "./vim";
 import ansiEscapes from "ansi-escapes";
@@ -188,6 +188,6 @@ function configureButtons(terminal) {
   });
 
   terminal.widget.dblclick(function () {
-    terminal.widget.addClass('cracked');
+    terminalCrack(terminal);
   });
 }

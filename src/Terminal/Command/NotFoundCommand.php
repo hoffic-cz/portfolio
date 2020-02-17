@@ -8,7 +8,7 @@ namespace App\Terminal\Command;
 use App\Object\CommandOutput;
 use App\Terminal\History;
 
-class NotFoundCommand implements Command
+class NotFoundCommand implements Command, Trigger
 {
     function execute(array $params, ?History $history = null): CommandOutput
     {
@@ -25,5 +25,10 @@ Try: sudo apt install <deb name>
 STDOUT;
 
         return new CommandOutput(sprintf($template, $params[0]));
+    }
+
+    function trigger(array $params, ?History $history = null): CommandOutput
+    {
+        return new CommandOutput('Trigger not found');
     }
 }
