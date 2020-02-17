@@ -105,4 +105,60 @@ $close-button-size: 24px;
     height: 100%;
     display: none;
   }
+
+  .crack {
+    display: none;
+
+    margin: 0 $terminal-border-width $terminal-border-width $terminal-border-width;
+    width: $terminal-width - 2 * $terminal-border-width;
+    height: $terminal-height - $terminal-head-height - $terminal-border-width;
+    position: relative;
+    bottom: $terminal-height - $terminal-head-height;
+
+    background-image: url("../../images/props/crack.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+
+  &.cracked {
+    transform-origin: top right;
+    animation-name: terminal-rotate;
+    animation-duration: 0.25s;
+    animation-fill-mode: forwards;
+    animation-timing-function: cubic-bezier(0.5, 0, 0.85, 0.5);
+
+    .crack {
+      display: block;
+
+      animation-name: terminal-crack;
+      animation-duration: 0.25s;
+      animation-fill-mode: forwards;
+      animation-timing-function: cubic-bezier(0.5, 0, 0.85, 0.5);
+    }
+  }
+}
+
+@keyframes terminal-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(-6deg);
+  }
+}
+
+
+@keyframes terminal-crack {
+  0% {
+    opacity: 0;
+  }
+
+  99% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
