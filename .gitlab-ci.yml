@@ -3,7 +3,7 @@ stages:
   - sonarcloud-check
 
 services:
-  - docker:dind
+  - docker:19.03.6-dind
 
 before_script:
   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY

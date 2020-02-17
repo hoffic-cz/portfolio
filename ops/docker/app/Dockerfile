@@ -1,5 +1,7 @@
 FROM alpine:3.11 as base
 
+RUN date
+
 RUN apk --no-cache add \
     php7-fpm \
     php7-apcu \
