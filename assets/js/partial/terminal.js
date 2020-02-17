@@ -186,4 +186,8 @@ function configureButtons(terminal) {
   terminal.widget.find('.item.timeline').first().click(function () {
     typeAndExecuteCommand(terminal, 'timeline');
   });
+
+  terminal.widget.dblclick(function () {
+    terminal.widget.addClass('cracked');
+  });
 }
