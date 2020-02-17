@@ -1,13 +1,14 @@
 import {setup as mazeSetup} from "./vim";
 import {setState, STATES} from "./states";
 import {notifyBackEnd, command as backEndCommand} from "./back-end-glue";
+import swal from "sweetalert";
 
 export function commandExit(terminal) {
   terminal.widget.hide();
   notifyBackEnd('exit');
 
   setTimeout(function () {
-    alert('Well, I wanna see what you are gonna do now...');
+    swal('Well, I wanna see what you are gonna do now...');
   }, 2000);
 }
 
@@ -22,7 +23,7 @@ export function commandOther(terminal, command, commandCallback) {
           });
         }
         if (response.alert != null) {
-          alert(response.alert);
+          swal(response.alert);
         }
         if (response.trigger != null) {
           triggerFrontEnd(terminal, response.trigger);

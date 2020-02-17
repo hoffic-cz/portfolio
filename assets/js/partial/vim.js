@@ -1,6 +1,7 @@
 import ansiEscapes from "ansi-escapes";
 import {command, notifyBackEnd} from "./back-end-glue";
 import {getState, setState, STATES} from "./states";
+import swal from "sweetalert";
 
 const LOGO_DURATION = 2000;
 const PLAYER_CHAR = '\x1b[1;31m' + '█' + '\x1b[1;0m';
@@ -39,7 +40,7 @@ function move(terminal, key) {
 
   if (isExit(terminal, x, y)) {
     command(': vim exit', function (response) {
-      alert(response.alert);
+      swal(response.alert);
     });
     setState(terminal, STATES.NORMAL);
   } else if (isValidPosition(terminal, x, y)) {
