@@ -22,14 +22,14 @@ class LsTest extends BaseTest
         );
     }
 
-    public function testNotContainsEggsCommand()
+    public function testNotContainsBugsCommand()
     {
-        self::assertNotContains('egg', self::executeIndependentCommand('ls'));
+        self::assertNotContains('bugs', self::executeIndependentCommand('ls'));
     }
 
-    public function testContainsEggsCommandWithFlag()
+    public function testContainsBugsCommandWithFlag()
     {
-        self::assertContains(' egg ', self::executeIndependentCommand('ls -a'));
+        self::assertContains(' bugs ', self::executeIndependentCommand('ls -a'));
     }
 
     public function testContainsLsCommand()

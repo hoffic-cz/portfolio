@@ -1,21 +1,22 @@
 stages:
   - build
   - sonarcloud-check
-
-services:
-  - docker:19.03.5-dind
+  - release
 
 before_script:
   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
 
 variables:
   CONTAINER_TEST_IMAGE: $CI_REGISTRY_IMAGE/test:$CI_COMMIT_SHORT_SHA
+  CONTAINER_RELEASE_IMAGE: $CI_REGISTRY_IMAGE/release:latest
   SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
   GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
 
 build:
   stage: build
   image: docker:19.03.5
+  services:
+    - docker:19.03.5-dind
   timeout: 10 minutes
   artifacts:
     paths:
@@ -51,3 +52,16 @@ sonarcloud-check:
     - sonar-scanner
   only:
     - master
+
+release:
+  stage: release
+  image: docker:19.03.5
+  services:
+    - docker:19.03.5-dind
+  timeout: 5 minutes
+  only:
+    - master
+  script:
+    - docker pull $CONTAINER_TEST_IMAGE
+    - docker tag $CONTAINER_TEST_IMAGE $CONTAINER_RELEASE_IMAGE
+    - docker push $CONTAINER_RELEASE_IMAGE
