@@ -33,6 +33,7 @@ class SourceArt
         $line = 0;
         $position = 0;
         $usedFilling = false;
+        $beaks = 0; // The tag symbols: <>
 
         while ($line < count($map)) {
             /*
@@ -76,12 +77,20 @@ class SourceArt
                         $output .= $part . ' ';
                         $position += strlen($part) + 1;
                         array_shift($parts);
+                        $beaks += substr_count($part, '<') - substr_count($part, '>');
                     }
                 } else {
                     $output .= str_repeat(' ', $distance);
                     $position += $distance;
                 }
             }
+        }
+
+        // check if inside element
+        while ($beaks > 0) {
+            $part = array_shift($parts);
+            $output .= $part . ' ';
+            $beaks += substr_count($part, '<') - substr_count($part, '>');
         }
 
         if (!$usedFilling) {
