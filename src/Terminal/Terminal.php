@@ -7,6 +7,7 @@ namespace App\Terminal;
 
 use App\Object\CommandOutput;
 use App\Terminal\Command\AboutCommand;
+use App\Terminal\Command\BugsCommand;
 use App\Terminal\Command\CatCommand;
 use App\Terminal\Command\CdCommand;
 use App\Terminal\Command\ClearCommand;
@@ -48,7 +49,7 @@ class Terminal
         'help' => [HelpCommand::class, true],
         'man' => [ManCommand::class, true],
         'exit' => [ExitCommand::class, true],
-        'egg' => [null, false],
+        'bugs' => [BugsCommand::class, false],
     ];
 
     public const TRIGGERS = [

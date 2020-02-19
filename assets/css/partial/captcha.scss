@@ -9,6 +9,8 @@ $captcha-color-secondary: rgba(0, 161, 255, 1);
 $captcha-widget-width: $captcha-image-width + 2 * $captcha-border-width;
 
 .captcha-widget {
+  display: none;
+
   z-index: 10;
 
   width: $captcha-widget-width;
@@ -17,8 +19,10 @@ $captcha-widget-width: $captcha-image-width + 2 * $captcha-border-width;
   color: $captcha-color-main;
 
   position: fixed;
-  left: 0;
-  top: 0;
+  left: 50%;
+  margin-left: - $captcha-widget-width / 2;
+
+  top: 120px;
 
   .head {
     width: $captcha-image-width;

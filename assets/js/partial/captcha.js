@@ -1,5 +1,6 @@
 import $ from "jquery";
 import {sendMetrics} from "./back-end-glue";
+import swal from "sweetalert";
 
 export function setUpCaptcha(captchaElement) {
   // Clicking the squares
@@ -22,5 +23,9 @@ export function setUpCaptcha(captchaElement) {
     });
 
     sendMetrics('captcha', selected);
+
+    $(captchaElement).hide();
+
+    swal('We\'ve sent your input for processing');
   });
 }

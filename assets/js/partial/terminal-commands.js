@@ -1,3 +1,4 @@
+import $ from "jquery";
 import {setup as mazeSetup} from "./vim";
 import {setState, STATES} from "./states";
 import {notifyBackEnd, command as backEndCommand} from "./back-end-glue";
@@ -53,10 +54,16 @@ function triggerFrontEnd(terminal, trigger) {
       setState(terminal, STATES.MAZE);
       mazeSetup(terminal);
       break;
+    case 'captcha':
+      captchaAction();
   }
 }
 
 function rmAction(terminal) {
   terminal.widget.find('.curtain').first().show();
   document.documentElement.requestFullscreen();
+}
+
+function captchaAction() {
+  $(document).find('.captcha-widget').first().show();
 }
