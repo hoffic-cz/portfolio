@@ -1,0 +1,15 @@
+<div class="captcha-widget">
+    <div class="head">
+        <div class="top">Select all squares with</div>
+        <div class="middle">Software Bugs</div>
+        <div class="bottom">If there are none, click skip</div>
+    </div>
+    <div class="challenge">
+        {% for i in 1..30 %}
+            <div class="square" data-tile-number="{{ i }}"></div>
+        {% endfor %}
+    </div>
+    <div class="controls">
+        <div class="button">Skip</div>
+    </div>
+</div>

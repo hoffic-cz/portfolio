@@ -12,6 +12,17 @@ export function notifyBackEnd(trigger) {
   });
 }
 
+export function sendMetrics(name, data) {
+  $.ajax('/metrics/', {
+    method: 'POST',
+    data: JSON.stringify({
+      name: name,
+      data: data,
+    }),
+    timeout: timeout,
+  });
+}
+
 export function command(command, success, error) {
   $.ajax('/command/', {
     method: 'POST',
