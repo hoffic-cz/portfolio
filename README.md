@@ -6,7 +6,7 @@
 This project is a website for showing information about myself and linking to relevant resources. It
 is meant to impress, let people interact with it and be impressed even more :)
 
-[VIDEO PLACEHOLDER]
+[![Hoffic.dev Portfolio Screenshot](/graphics/screenshot.png?raw=true "Screenshot")](https://www.youtube.com/watch?v=Hyk4fydilE0)
 
 
 
