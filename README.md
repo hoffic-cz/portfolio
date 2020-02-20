@@ -8,6 +8,8 @@ is meant to impress, let people interact with it and be impressed even more :)
 
 [![Hoffic.dev Portfolio Screenshot](/graphics/screenshot.png?raw=true "Screenshot")](https://www.youtube.com/watch?v=Hyk4fydilE0)
 
+[Video Overview (60 seconds)](https://www.youtube.com/watch?v=Hyk4fydilE0)
+
 
 
 ## Live version
