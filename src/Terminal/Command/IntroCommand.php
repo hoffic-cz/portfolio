@@ -97,6 +97,8 @@ STDOUT
 
         $output->setAlert('Next time try :q<enter> to exit vim properly :P');
 
+        $history->unsetNote(VimCommand::START_TIME_KEY);
+
         return $output;
     }
 }
