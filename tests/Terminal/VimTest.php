@@ -48,4 +48,14 @@ class VimTest extends BaseTest
             '',
             true);
     }
+
+    public function testOnlyRoastOnce()
+    {
+        $session = self::getTestSession();
+
+        self::executeInSession('vi something', $session);
+        self::executeInSession('intro', $session);
+
+        self::assertEmpty(self::executeInSessionRaw('intro', $session)->getAlert());
+    }
 }
