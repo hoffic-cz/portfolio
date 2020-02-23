@@ -101,8 +101,10 @@ class Terminal
         $history = History::load($this->session);
 
         if ($name === ':') {
-            $history->log($command);
-            $this->metricsLogger->log(ActivityType::EVENT, $command, join(' ', $parts));
+            array_shift($parts); // Removes :
+            $name = array_shift($parts);
+            $history->log($name);
+            $this->metricsLogger->log(ActivityType::EVENT, $name, join(' ', $parts));
             return $this->trigger($parts, $history);
         } else {
             $history->log($name);
