@@ -129,6 +129,9 @@
     "psr/log": {
         "version": "1.1.2"
     },
+    "ramsey/uuid": {
+        "version": "3.9.3"
+    },
     "sendgrid/php-http-client": {
         "version": "3.10.2"
     },

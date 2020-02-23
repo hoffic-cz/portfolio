@@ -7,6 +7,7 @@
         "ext-gd": "*",
         "ext-iconv": "*",
         "ext-json": "*",
+        "ramsey/uuid": "^3.9",
         "sendgrid/sendgrid": "^7.4",
         "sensio/framework-extra-bundle": "^5.1",
         "symfony/asset": "4.4.*",
