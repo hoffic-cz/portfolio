@@ -39,25 +39,21 @@ class CommandController extends AbstractController
     {
         $terminal->setSession($this->session);
 
-        try {
-            $content = $request->getContent();
-            $payload = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+        $content = $request->getContent();
+        $payload = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
 
-            if (empty($payload->command)) {
-                throw new \InvalidArgumentException();
-            }
-
-            $output = $terminal->command($payload->command);
-
-            $this->session->save();
-
-            return new JsonResponse([
-                'stdout' => $output->getStdout(),
-                'alert' => $output->getAlert(),
-                'trigger' => $output->getTrigger(),
-            ]);
-        } catch (Exception $e) {
-            return new JsonResponse([], Response::HTTP_BAD_REQUEST);
+        if (empty($payload->command)) {
+            throw new \InvalidArgumentException();
         }
+
+        $output = $terminal->command($payload->command);
+
+        $this->session->save();
+
+        return new JsonResponse([
+            'stdout' => $output->getStdout(),
+            'alert' => $output->getAlert(),
+            'trigger' => $output->getTrigger(),
+        ]);
     }
 }

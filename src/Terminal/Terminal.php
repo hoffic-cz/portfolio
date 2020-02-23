@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Terminal;
 
 
+use App\Enum\ActivityType;
 use App\Object\CommandOutput;
+use App\Stats\MetricsLogger;
 use App\Terminal\Command\AboutCommand;
 use App\Terminal\Command\BugsCommand;
 use App\Terminal\Command\CatCommand;
@@ -66,13 +68,21 @@ class Terminal
     /** @var SessionInterface */
     private $session;
 
+    /** @var MetricsLogger */
+    private $metricsLogger;
+
     /**
      * Terminal constructor.
      * @param CmdImplProvider $cmdImplProvider
+     * @param MetricsLogger $metricsLogger
      */
-    public function __construct(CmdImplProvider $cmdImplProvider)
+    public function __construct(
+        CmdImplProvider $cmdImplProvider,
+        MetricsLogger $metricsLogger
+    )
     {
         $this->cmdImplProvider = $cmdImplProvider;
+        $this->metricsLogger = $metricsLogger;
     }
 
     /**
@@ -92,9 +102,11 @@ class Terminal
 
         if ($name === ':') {
             $history->log($command);
+            $this->metricsLogger->log(ActivityType::EVENT, $command, join(' ', $parts));
             return $this->trigger($parts, $history);
         } else {
             $history->log($name);
+            $this->metricsLogger->log(ActivityType::COMMAND, $name, join(' ', $parts));
             return $this->execute($name, $parts, $history);
         }
     }

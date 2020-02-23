@@ -10,3 +10,13 @@ services:
       - 8080:8080
     volumes:
       - ./:/var/www/html
+  db:
+    image: timescale/timescaledb:latest-pg11
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=gslnoacnlenjalndalidghan
+    volumes:
+      - ./.volumes/db_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
