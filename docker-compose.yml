@@ -15,8 +15,11 @@ services:
     restart: always
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=gslnoacnlenjalndalidghan
+      - POSTGRES_PASSWORD=change_this
     volumes:
-      - ./.volumes/db_data:/var/lib/postgresql/data
+      - db_data:/var/lib/postgresql/data
     ports:
       - 5432:5432
+
+volumes:
+  db_data:
