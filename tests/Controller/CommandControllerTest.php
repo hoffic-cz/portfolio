@@ -36,6 +36,6 @@ class CommandControllerTest extends WebTestCase
             '}Hello Clem!{'
         );
 
-        self::assertEquals(400, $client->getResponse()->getStatusCode());
+        self::assertEquals(500, $client->getResponse()->getStatusCode());
     }
 }
