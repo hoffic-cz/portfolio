@@ -105,7 +105,7 @@ class Terminal
             $name = array_shift($parts);
             $history->log($name);
             $this->metricsLogger->log(ActivityType::EVENT, $name, join(' ', $parts));
-            return $this->trigger($parts, $history);
+            return $this->trigger($name, $parts, $history);
         } else {
             $history->log($name);
             $this->metricsLogger->log(ActivityType::COMMAND, $name, join(' ', $parts));
@@ -131,11 +131,9 @@ class Terminal
         }
     }
 
-    private function trigger(array $parts, ?History $history): CommandOutput
+    private function trigger(string $name, array $parts, ?History $history): CommandOutput
     {
-        array_shift($parts); // Discarding the escape colon
-        $trigger = array_shift($parts);
-        $implementation = $this->cmdImplProvider->getTrigger($trigger);
+        $implementation = $this->cmdImplProvider->getTrigger($name);
         return $implementation->trigger($parts, $history);
     }
 
