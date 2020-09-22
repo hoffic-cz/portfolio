@@ -162,6 +162,10 @@ class TimelineCommand implements Command
 
     private function positionDate(DateTime $date): int
     {
+        if ($date > $this->endDate) {
+            $date = $this->endDate;
+        }
+
         $difference = $this->endDate->diff($date);
 
         $months = $difference->y * 12 + $difference->m;

@@ -8,9 +8,10 @@ parameters:
     emails_from: 'noreply@hoffic.dev'
     emails_to: 'petr@hoffic.dev'
     timeline:
-        'Swansea University': 'September 2017 - now'
-        'Fixture Travel': 'March 2018 - now'
-        'Volleyball Team Captain': 'June 2019 - now'
+        'Amazon SDE Internship': 'June 2020 - September 2020'
+        'Fixture Travel Engineer': 'March 2018 - May 2020'
+        'Swansea University': 'September 2017 - June 2021'
+        'Volleyball Team Captain': 'June 2019 - June 2021'
         'Volleyball Club Treasurer': 'June 2018 - May 2019'
 
 services:
