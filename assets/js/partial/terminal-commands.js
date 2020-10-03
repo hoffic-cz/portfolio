@@ -15,6 +15,7 @@ export function commandExit(terminal) {
 
 export function terminalCrack(terminal) {
   terminal.widget.addClass('cracked');
+  setState(terminal, STATES.CRACKED);
   notifyBackEnd(': crack');
 }
 

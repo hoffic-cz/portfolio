@@ -1,6 +1,7 @@
 export const STATES = {
   NORMAL: 'normal',
   MAZE: 'maze',
+  CRACKED: 'cracked',
 };
 
 export function getState(terminal) {

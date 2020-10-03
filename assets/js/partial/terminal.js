@@ -86,11 +86,13 @@ function populateTerminal(terminal) {
  * @param commandName
  */
 function typeAndExecuteCommand(terminal, commandName) {
-  terminal.writeln(commandName);
+  if (getState(terminal) === STATES.NORMAL) {
+    terminal.writeln(commandName);
 
-  command(terminal, commandName, function () {
-    terminal.prompt();
-  });
+    command(terminal, commandName, function () {
+      terminal.prompt();
+    });
+  }
 }
 
 /**
