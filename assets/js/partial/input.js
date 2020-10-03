@@ -16,6 +16,7 @@ export function configureInput(terminal) {
   terminal.inputBuffer = '';
   terminal.inputCaretPosition = 0;
   terminal.inputHistory = [];
+  terminal.inputHistoryPositionSelected = -1;
 
   terminal.onKey(function (event) {
     if (getState(terminal) === STATES.NORMAL) {
@@ -59,6 +60,7 @@ function keyEnter(terminal, key) {
   let input = terminal.inputBuffer;
   terminal.inputBuffer = '';
   terminal.inputCaretPosition = 0;
+  terminal.inputHistoryPositionSelected = -1;
 
   input = removeEscapeColon(input);
 
@@ -96,10 +98,10 @@ function keyBackspace(terminal) {
 function keyArrow(terminal, key) {
   switch (key) {
     case '\x1b[A':
-      //up;
+      historyPrevious(terminal);
       break;
     case '\x1b[B':
-      //down;
+      historyNext(terminal);
       break;
     case '\x1b[C':
       moveCaretRight(terminal);
@@ -149,7 +151,10 @@ function removeEscapeColon(input) {
 function addToHistory(terminal, input) {
   let history = terminal.inputHistory;
 
-  if (history.length === 0 || history[history.length - 1] !== input) {
+  let isDifferent = history.length === 0 || history[history.length - 1] !== input;
+  let isEmpty = input.length === 0;
+
+  if (isDifferent && !isEmpty) {
     terminal.inputHistory.push(input);
   }
 }
@@ -166,4 +171,49 @@ function moveCaretRight(terminal) {
     terminal.inputCaretPosition++;
     terminal.write(ansiEscapes.cursorForward());
   }
+}
+
+function historyPrevious(terminal) {
+  if (terminal.inputHistory.length > 0) {
+    if (terminal.inputHistoryPositionSelected === -1) {
+      if (terminal.inputBuffer.length > 0) {
+        terminal.inputHistory.push(terminal.inputBuffer);
+        terminal.inputHistoryPositionSelected = terminal.inputHistory.length - 2;
+      } else {
+        terminal.inputHistoryPositionSelected = terminal.inputHistory.length - 1;
+      }
+
+    } else if (terminal.inputHistoryPositionSelected > 0) {
+      terminal.inputHistoryPositionSelected--;
+    }
+
+    renderHistory(terminal);
+  }
+}
+
+function historyNext(terminal) {
+  if (terminal.inputHistoryPositionSelected !== -1) {
+    if (terminal.inputHistoryPositionSelected === terminal.inputHistory.length - 1) {
+      terminal.inputHistoryPositionSelected = -1;
+    } else if (terminal.inputHistoryPositionSelected < terminal.inputHistory.length -1) {
+      terminal.inputHistoryPositionSelected++;
+    }
+
+    renderHistory(terminal);
+  }
+}
+
+function renderHistory(terminal) {
+  let contents = '';
+  if (terminal.inputHistoryPositionSelected !== -1) {
+    contents = terminal.inputHistory[terminal.inputHistoryPositionSelected];
+  }
+
+  terminal.inputBuffer = contents;
+  terminal.inputCaretPosition = contents.length;
+
+  terminal.write(ansiEscapes.eraseLine);
+  terminal.write(ansiEscapes.cursorTo(0));
+  terminal.prompt();
+  terminal.write(contents);
 }
