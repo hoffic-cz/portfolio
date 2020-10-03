@@ -64,16 +64,6 @@ docker-compose exec app ash -c "yarn build"
 
 Navigate to [http://localhost:8080](http://localhost:8080) in your browser.
 
-### Permission issues
-
-Should you encounter permission issues, which manifest themselves by lots of red in the console, make
-sure you are a member of the `nogroup` group and that everything in the project directory is owned
-by `nobody:nogroup`.
-
-```bash
-sudo chown -R nobody:nogroup ./
-```
-
 ### Running tests
 
 Run the following command to execute the PHPUnit test suite.

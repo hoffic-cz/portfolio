@@ -1,4 +1,6 @@
 FROM alpine:3.11 as base
+ARG FILE_OWNER=nobody
+RUN echo "File owner: $FILE_OWNER"
 
 RUN apk --no-cache add \
     php7-fpm \
@@ -47,14 +49,14 @@ RUN mkdir -p /.composer \
   && mkdir -p /.cache/yarn \
   && mkdir -p /.yarn
 
-# Make sure files/folders needed by the processes are accessable when they run under the nobody user
-RUN chown -R nobody.nobody /run && \
-  chown -R nobody.nobody /var/lib && \
-  chown -R nobody.nobody /var/tmp && \
-  chown -R nobody.nobody /var/log && \
-  chown -R nobody.nobody /.composer && \
-  chown -R nobody.nobody /.cache/yarn && \
-  chown -R nobody.nobody /.yarn
+# Make sure files/folders needed by the processes are accessable when they run under the $FILE_OWNER user
+RUN chown -R $FILE_OWNER.$FILE_OWNER /run && \
+  chown -R $FILE_OWNER.$FILE_OWNER /var/lib && \
+  chown -R $FILE_OWNER.$FILE_OWNER /var/tmp && \
+  chown -R $FILE_OWNER.$FILE_OWNER /var/log && \
+  chown -R $FILE_OWNER.$FILE_OWNER /.composer && \
+  chown -R $FILE_OWNER.$FILE_OWNER /.cache/yarn && \
+  chown -R $FILE_OWNER.$FILE_OWNER /.yarn
 
 # Setup document root
 RUN mkdir -p /var/www/html
@@ -62,11 +64,11 @@ RUN mkdir -p /var/www/html
 # Set the workign dir to the document root
 WORKDIR /var/www/html
 
-# Set nobody the owner of the work dir
-RUN chown nobody /var/www/html
+# Set $FILE_OWNER the owner of the work dir
+RUN chown $FILE_OWNER /var/www/html
 
 # Switch to use a non-root user from here on
-USER nobody
+USER $FILE_OWNER
 
 # Expose the port nginx is reachable on
 EXPOSE 8080
@@ -82,6 +84,7 @@ HEALTHCHECK --timeout=10s CMD curl --silent --fail http://127.0.0.1:8080/
 
 
 FROM base as dev
+ARG FILE_OWNER=nobody
 
 ENV APP_ENV=dev
 
@@ -95,7 +98,8 @@ RUN apk add --no-cache \
   yarn \
   php7-xdebug
 
-USER nobody
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+USER $FILE_OWNER
 
 ENV PHP_IDE_CONFIG="serverName=portfolio.local"
 ENV XDEBUG_CONFIG="idekey=PHPSTORM"
@@ -108,6 +112,7 @@ HEALTHCHECK --timeout=10s CMD true
 
 
 FROM base as build
+ARG FILE_OWNER=nobody
 
 # We want the artifacts to be built using production settings.
 ENV APP_ENV=prod
@@ -123,10 +128,10 @@ RUN apk add --no-cache \
   yarn \
   php7-xdebug
 
-USER nobody
+USER $FILE_OWNER
 
 # Add source code
-COPY --chown=nobody . .
+COPY --chown=$FILE_OWNER . .
 
 RUN composer install --no-interaction --no-ansi
 
@@ -144,8 +149,9 @@ RUN sed -i 's+/var/www/html/+./+g' var/coverage/clover.xml \
 
 
 FROM base as prod
+ARG FILE_OWNER=nobody
 
 ENV APP_ENV=prod
 
 # Copy built application
-COPY --chown=nobody --from=build /var/www/html/ /var/www/html/
+COPY --chown=$FILE_OWNER --from=build /var/www/html/ /var/www/html/

@@ -6,6 +6,8 @@ services:
       dockerfile: ./ops/docker/app/Dockerfile
       context: ./
       target: dev
+      args:
+        FILE_OWNER: 1000
     ports:
       - 8080:8080
     volumes:
