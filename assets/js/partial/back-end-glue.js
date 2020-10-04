@@ -23,7 +23,7 @@ export function sendMetrics(name, data) {
   });
 }
 
-export function command(command, success, error) {
+export function backEndCommand(command, success, error) {
   $.ajax('/command/', {
     method: 'POST',
     data: JSON.stringify({
@@ -32,5 +32,17 @@ export function command(command, success, error) {
     timeout: timeout,
     success: success,
     error: error,
+  });
+}
+
+export function autocomplete(input, success) {
+  $.ajax('/autocomplete/', {
+    method: 'POST',
+    data: JSON.stringify({
+      input: input,
+    }),
+    timeout: timeout,
+    success: success,
+    error: null,
   });
 }

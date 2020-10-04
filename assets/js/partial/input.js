@@ -2,6 +2,7 @@ import {getState, STATES} from "./states";
 import {key as mazeKey} from "./vim";
 import ansiEscapes from "ansi-escapes";
 import {command} from "./terminal";
+import {autocomplete, backEndCommand} from "./back-end-glue";
 
 const promptText = '\x1b[1;32mvisitor@hoffic.dev\x1b[1;32m\x1b[1;37m:\x1b[1;34m~\x1b[1;0m$ ';
 const promptTextLength = promptText.length
@@ -21,6 +22,9 @@ export function configureInput(terminal) {
   terminal.onKey(function (event) {
     if (getState(terminal) === STATES.NORMAL) {
       switch (event.key.charCodeAt(0)) {
+        case 9:
+          keyTab(terminal);
+          break;
         case 13:
           keyEnter(terminal, event.key);
           break;
@@ -69,6 +73,24 @@ function keyEnter(terminal, key) {
   command(terminal, input, function () {
     terminal.prompt();
   });
+}
+
+function keyTab(terminal) {
+  if (terminal.inputCaretPosition === terminal.inputBuffer.length) {
+    autocomplete(terminal.inputBuffer, function (response) {
+      if (response.autocomplete) {
+        terminal.write(response.autocomplete);
+        terminal.inputBuffer = terminal.inputBuffer + response.autocomplete;
+        terminal.inputCaretPosition += response.autocomplete.length;
+      } else if (response.suggestions) {
+        terminal.writeln('');
+        terminal.write(response.suggestions.join(' '));
+        terminal.writeln('');
+        terminal.prompt();
+        terminal.write(terminal.inputBuffer);
+      }
+    });
+  }
 }
 
 /**

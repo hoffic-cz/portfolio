@@ -1,7 +1,7 @@
 import $ from "jquery";
 import {setup as mazeSetup} from "./vim";
 import {setState, STATES} from "./states";
-import {notifyBackEnd, command as backEndCommand} from "./back-end-glue";
+import {notifyBackEnd, backEndCommand} from "./back-end-glue";
 import swal from "sweetalert";
 
 export function commandExit(terminal) {

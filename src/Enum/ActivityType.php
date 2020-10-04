@@ -9,4 +9,5 @@ class ActivityType
 {
     const COMMAND = 'command';
     const EVENT = 'event';
+    const AUTOCOMPLETE = 'autocomp';
 }

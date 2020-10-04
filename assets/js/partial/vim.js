@@ -1,5 +1,5 @@
 import ansiEscapes from "ansi-escapes";
-import {command, notifyBackEnd} from "./back-end-glue";
+import {backEndCommand, notifyBackEnd} from "./back-end-glue";
 import {getState, setState, STATES} from "./states";
 import swal from "sweetalert";
 
@@ -39,7 +39,7 @@ function move(terminal, key) {
   }
 
   if (isExit(terminal, x, y)) {
-    command(': vim exit', function (response) {
+    backEndCommand(': vim exit', function (response) {
       swal(response.alert);
     });
     setState(terminal, STATES.NORMAL);
