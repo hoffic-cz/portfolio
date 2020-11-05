@@ -22,6 +22,6 @@ class IndexControllerTest extends WebTestCase
         $client = static::createClient();
         $client->request('GET', '/');
 
-        $this->assertContains('Hi, my name is', $client->getResponse()->getContent());
+        $this->assertRegExp('/Hi, *my *name *is/', $client->getResponse()->getContent());
     }
 }
