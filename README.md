@@ -59,6 +59,7 @@ In a new terminal window unless you supplied the -d flag
 
 ```bash
 docker-compose exec app ash -c "composer install"
+docker-compose exec app ash -c "yarn install"
 docker-compose exec app ash -c "yarn build"
 ```
 
