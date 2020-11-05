@@ -1,5 +1,25 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Petr Hoffmann - Software Engineer | {{ parent() }}{% endblock %}
+
+{% block ldscript %}
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "Petr Hoffmann",
+            "url": "https://hoffic.dev/",
+            "logo": "https://hoffic.dev/static/profile.jpg",
+            "sameAs": [
+                "https://www.linkedin.com/in/hoffic-cz/",
+                "https://www.facebook.com/hoffic.cz/",
+                "https://www.instagram.com/hoffic/",
+                "https://gitlab.com/hoffic.cz"
+            ]
+        }
+    </script>
+{% endblock %}
+
 {% block body %}
     <section class="hero is-fullheight">
         <div class="container content">
