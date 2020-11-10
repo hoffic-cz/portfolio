@@ -14,7 +14,7 @@ services:
       - ./:/var/www/html
   db:
     image: timescale/timescaledb:latest-pg11
-    restart: always
+    restart: unless-stopped
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=change_this
