@@ -38,4 +38,13 @@ class SayTest extends BaseTest
             '',
             true);
     }
+
+    public function testDisplayUsageOnEmptyArgs()
+    {
+        self::assertContains(
+            'remember',
+            self::executeIndependentCommand('say'),
+            '',
+            true);
+    }
 }

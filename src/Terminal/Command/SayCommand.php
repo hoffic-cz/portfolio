@@ -36,15 +36,26 @@ class SayCommand implements Command
 
     function execute(array $params, ?History $history = null): CommandOutput
     {
-        $email = new Email();
-        $email->from($this->emailsFrom);
-        $email->to($this->emailsTo);
+        if (count($params) === 1) {
+            return new CommandOutput(<<<'MESSAGE'
+Remember to pass your message:
+  say <message>
 
-        $email->subject('Message from Hoffic.dev');
-        $email->text(implode(' ', $params));
+PS: Unless you say your name, I won't know who you are 😉
+MESSAGE
+);
 
-        $this->mailer->send($email);
+        } else {
+            $email = new Email();
+            $email->from($this->emailsFrom);
+            $email->to($this->emailsTo);
 
-        return new CommandOutput('Thank you for your message, it has been received :)');
+            $email->subject('Message from Hoffic.dev');
+            $email->text(implode(' ', $params));
+
+            $this->mailer->send($email);
+
+            return new CommandOutput('Thank you for your message, it has been received :)');
+        }
     }
 }
